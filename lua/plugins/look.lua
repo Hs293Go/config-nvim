@@ -78,6 +78,7 @@ return {
 				{ "<leader>g", group = "git" },
 				{ "<leader>o", group = "oil" },
 				{ "<leader>q", group = "quit session" },
+				{ "<leader>n", group = "test (neotest)" },
 				{ "<leader>t", group = "tasks" },
 				{ "<leader>tc", group = "cmake" },
 				{ "<leader>tcs", group = "reselect" },
