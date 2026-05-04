@@ -1,0 +1,25 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "default",
+      "displayName": "Default",
+      "binaryDir": "${sourceDir}/build",
+      "generator": "Ninja",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    },
+    {
+      "name": "hidden-base",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "generator": "Ninja"
+    }
+  ],
+  "buildPresets": [
+    { "name": "build-default", "configurePreset": "default" },
+    { "name": "build-default-release", "configurePreset": "default", "configuration": "Release" }
+  ],
+  "testPresets": [
+    { "name": "test-default", "configurePreset": "default" }
+  ]
+}

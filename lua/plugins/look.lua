@@ -78,6 +78,10 @@ return {
 				{ "<leader>g", group = "git" },
 				{ "<leader>o", group = "oil" },
 				{ "<leader>q", group = "quit session" },
+				{ "<leader>t", group = "tasks" },
+				{ "<leader>tc", group = "cmake" },
+				{ "<leader>tcs", group = "reselect" },
+				{ "<leader>M", group = "macros" },
 				{ "<leader>fw", group = "grep word", mode = { "n", "v" } },
 			},
 			icons = {

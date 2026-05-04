@@ -1,0 +1,31 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "BASE_VAR": "from-base",
+        "OVERRIDE_ME": "base-value"
+      }
+    },
+    {
+      "name": "child",
+      "inherits": "base",
+      "cacheVariables": {
+        "CHILD_VAR": "from-child",
+        "OVERRIDE_ME": "child-value"
+      }
+    },
+    {
+      "name": "grandchild",
+      "inherits": "child",
+      "binaryDir": "${sourceDir}/custom-build",
+      "cacheVariables": {
+        "GRANDCHILD_VAR": "from-grandchild"
+      }
+    }
+  ]
+}

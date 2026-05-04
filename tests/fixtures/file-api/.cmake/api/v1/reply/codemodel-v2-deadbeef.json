@@ -1,0 +1,19 @@
+{
+  "kind": "codemodel",
+  "version": { "major": 2, "minor": 6 },
+  "configurations": [
+    {
+      "name": "Debug",
+      "targets": [
+        { "name": "myapp", "id": "myapp::@deadbeef", "jsonFile": "target-myapp-Debug-cafe.json" },
+        { "name": "mylib", "id": "mylib::@deadbeef", "jsonFile": "target-mylib-Debug-beef.json" }
+      ]
+    },
+    {
+      "name": "Release",
+      "targets": [
+        { "name": "myapp", "id": "myapp::@deadbeef", "jsonFile": "target-myapp-Release-aaaa.json" }
+      ]
+    }
+  ]
+}

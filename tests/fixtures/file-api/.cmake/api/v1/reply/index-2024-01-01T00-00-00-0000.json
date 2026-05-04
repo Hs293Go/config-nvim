@@ -1,0 +1,6 @@
+{
+  "cmake": { "version": { "major": 3, "minor": 28, "patch": 0 } },
+  "objects": [
+    { "kind": "codemodel", "version": { "major": 2, "minor": 6 }, "jsonFile": "codemodel-v2-deadbeef.json" }
+  ]
+}

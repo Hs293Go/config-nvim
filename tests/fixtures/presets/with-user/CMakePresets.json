@@ -1,0 +1,9 @@
+{
+  "version": 3,
+  "configurePresets": [
+    { "name": "main-only", "binaryDir": "${sourceDir}/build/main", "generator": "Ninja" }
+  ],
+  "buildPresets": [
+    { "name": "build-main", "configurePreset": "main-only" }
+  ]
+}

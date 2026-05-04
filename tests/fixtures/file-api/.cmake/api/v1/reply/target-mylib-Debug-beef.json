@@ -1,0 +1,6 @@
+{
+  "name": "mylib",
+  "type": "STATIC_LIBRARY",
+  "artifacts": [{ "path": "libmylib.a" }],
+  "nameOnDisk": "libmylib.a"
+}
