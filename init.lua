@@ -114,10 +114,10 @@ local function open_directory(dir)
 end
 vim.keymap.set("n", "<leader>e", function()
 	open_directory(vim.fn.expand("%:p:h"))
-end, { desc = "Open file's parent directory in explorer" })
+end, { desc = "Open in explorer (file parent)" })
 vim.keymap.set("n", "<leader>E", function()
 	open_directory(vim.fn.getcwd())
-end, { desc = "Open cwd in explorer" })
+end, { desc = "Open in explorer (cwd)" })
 
 -- AUTOCMDS
 -- ========
