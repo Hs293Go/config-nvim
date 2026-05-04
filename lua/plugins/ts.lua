@@ -1,0 +1,117 @@
+-- Protection against the master/main branch chaos:
+--   * `branch = "master"` pins the legacy-but-stable API. The `main` branch is
+--     a rewrite with an entirely different setup shape, missing the module
+--     ecosystem we use (textobjects, incremental_selection, indent).
+--   * `main = "nvim-treesitter.configs"` tells lazy.nvim's default opts handler
+--     to call `require("nvim-treesitter.configs").setup(opts)` — without it,
+--     lazy.nvim would call `require("nvim-treesitter").setup(opts)` and the
+--     opts table would be silently ignored.
+-- If you ever flip to the main branch, you must also rewrite this whole spec
+-- and replace the module-style configs with `vim.treesitter.start()` autocmds.
+return {
+	{
+		"nvim-treesitter/nvim-treesitter",
+		branch = "master",
+		main = "nvim-treesitter.configs",
+		build = ":TSUpdate",
+		event = { "BufReadPost", "BufNewFile" },
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter-textobjects",
+		},
+		opts = {
+			ensure_installed = {
+				-- systems languages
+				"c",
+				"cpp",
+				"cuda",
+				"rust",
+
+				-- scripting languages
+				"python",
+				"lua",
+				"vim",
+				"vimdoc",
+
+				-- OS/system/build scripting
+				"bash",
+				"nix",
+				"make",
+				"cmake",
+				"dockerfile",
+
+				-- markup languages
+				"latex",
+				"markdown",
+				"markdown_inline",
+
+				-- config languages
+				"toml",
+				"xml",
+				"json",
+				"yaml",
+
+				-- version control
+				"gitignore",
+				"diff",
+
+				-- treesitter queries themselves
+				"query",
+				"regex",
+			},
+			auto_install = true,
+			highlight = {
+				enable = true,
+				additional_vim_regex_highlighting = false,
+			},
+			incremental_selection = {
+				enable = true,
+				keymaps = {
+					init_selection = "<C-space>",
+					node_incremental = "<C-space>",
+					scope_incremental = false,
+					node_decremental = "<bs>",
+				},
+			},
+			indent = { enable = true },
+			textobjects = {
+				select = {
+					enable = true,
+					lookahead = true,
+					keymaps = {
+						["af"] = "@function.outer",
+						["if"] = "@function.inner",
+						["ac"] = "@class.outer",
+						["ic"] = "@class.inner",
+						["aa"] = "@parameter.outer",
+						["ia"] = "@parameter.inner",
+					},
+				},
+				move = {
+					enable = true,
+					set_jumps = true,
+					goto_next_start = {
+						["]f"] = "@function.outer",
+						["]c"] = "@class.outer",
+					},
+					goto_next_end = {
+						["]F"] = "@function.outer",
+						["]C"] = "@class.outer",
+					},
+					goto_previous_start = {
+						["[f"] = "@function.outer",
+						["[c"] = "@class.outer",
+					},
+					goto_previous_end = {
+						["[F"] = "@function.outer",
+						["[C"] = "@class.outer",
+					},
+				},
+			},
+		},
+	},
+	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		branch = "master",
+		lazy = true,
+	},
+}

@@ -1,0 +1,92 @@
+{
+  "libs": {
+    "prefix": "libs",
+    "body": "add_library(${1:library_name} STATIC)",
+    "description": "Add a static library target"
+  },
+  "libd": {
+    "prefix": "libd",
+    "body": "add_library(${1:library_name} SHARED)",
+    "description": "Add a shared library target"
+  },
+  "libi": {
+    "prefix": "libi",
+    "body": "add_library(${1:library_name} INTERFACE)",
+    "description": "Add an interface library target"
+  },
+  "alias": {
+    "prefix": "alias",
+    "body": "add_library(${1:namespace}::${2:alias} ALIAS ${3:$1}_${4:$2})",
+    "description": "Create an alias for a target"
+  },
+  "exe": {
+    "prefix": "exe",
+    "body": "add_executable(${1:executable_name} ${2:source_files})",
+    "description": "Add an executable target"
+  },
+  "sources": {
+    "prefix": "src",
+    "body": "target_sources(${1:target_name}\nFILE_SET HEADERS BASE_DIRS ${2:include} FILES ${3:header_files}\nPRIVATE ${2:source_files})",
+    "description": "Add source files to a target"
+  },
+  "link": {
+    "prefix": "link",
+    "body": "target_link_libraries(${1:target_name} PRIVATE ${2:libraries})",
+    "description": "Link libraries to a target"
+  },
+  "feat": {
+    "prefix": "feat",
+    "body": "target_compile_features(${1:target_name} PUBLIC ${2:cxx_std_23})",
+    "description": "Specify compile features for a target"
+  },
+  "opts": {
+    "prefix": "opts",
+    "body": "target_compile_options(${1:target_name} PRIVATE ${2:options})",
+    "description": "Add compile options to a target"
+  },
+  "defn": {
+    "prefix": "defn",
+    "body": "target_compile_definitions(${1:target_name} PRIVATE ${2:definitions})",
+    "description": "Add compile definitions to a target"
+  },
+  "stp": {
+    "prefix": "stp",
+    "body": "set_target_properties(${1:target_name} PROPERTIES ${2:property} ${3:value})",
+    "description": "Set properties for a target"
+  },
+  "status": {
+    "prefix": "status",
+    "body": "message(STATUS \"${1:message}\")",
+    "description": "Print a status message during configuration"
+  },
+  "error": {
+    "prefix": "error",
+    "body": "message(FATAL_ERROR \"${1:error_message}\")",
+    "description": "Print an error message and stop configuration"
+  },
+  "warn": {
+    "prefix": "warn",
+    "body": "message(WARNING \"${1:warning_message}\")",
+    "description": "Print a warning message during configuration"
+  },
+  "var": {
+    "prefix": "var",
+    "body": "set(${1:variable_name} ${2:value})",
+    "description": "Set a variable to a value"
+  },
+  "opt": {
+    "prefix": "opt",
+    "body": "option(${1:option_name} \"${2:description}\" ${3:ON})",
+    "description": "Define a CMake option"
+  },
+  "find": {
+    "prefix": "find",
+    "body": "find_package(${1:package_name} REQUIRED)",
+    "description": "Find and load settings for an external package"
+  },
+  "test": {
+    "prefix": "test",
+    "body": "enable_testing()\nadd_test(NAME ${1:test_name} COMMAND ${2:test_command})",
+    "description": "Enable testing and add a test case"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "use": {
+    "prefix": "use",
+    "body": ["\\usepackage{$1}"],
+    "description": "Up arrow symbol"
+  },
+  "eq": {
+    "prefix": "\\",
+    "body": ["\\($1\\)"],
+    "description": "Inline equation"
+  },
+  "bm": {
+    "prefix": "bm",
+    "body": ["\\boldsymbol{$1}"],
+    "description": "Bold math symbol"
+  },
+  "tsup": {
+    "prefix": "tsup",
+    "body": ["\\textsuperscript{$1}"],
+    "description": "Text superscript"
+  },
+  "tsub": {
+    "prefix": "tsub",
+    "body": ["\\textsubscript{$1}"],
+    "description": "Text subscript"
+  },
+  "dot": {
+    "prefix": "dot",
+    "body": ["\\dot{$1}"],
+    "description": "Dot over symbol"
+  },
+  "bmat": {
+    "prefix": "bmat",
+    "body": ["\\begin{bmatrix}", "  $1", "\\end{bmatrix}"],
+    "description": "Bmatrix environment"
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "Guard": {
+    "prefix": "Guard",
+    "description": "Header guard",
+    "body": "#ifndef ${1:HEADER_NAME}_HPP_\n#define ${1:HEADER_NAME}_HPP_\n\n$0\n\n#endif // ${1:HEADER_NAME}_HPP_"
+  },
+  "incs": {
+    "prefix": "incs",
+    "description": "Include system headers",
+    "body": "#include <${1:cstdio}>"
+  },
+  "incu": {
+    "prefix": "incu",
+    "description": "Include user headers",
+    "body": "#include \"${1:header.hpp}\""
+  },
+  "nsd": {
+    "prefix": "nsd",
+    "description": "Namespace declaration",
+    "body": "namespace ${1:Name} {\n\t$0\n}  // namespace ${1:Name}"
+  },
+  "nsa": {
+    "prefix": "nsa",
+    "description": "Namespace alias",
+    "body": "namespace ${1:Alias} = ${2:OriginalNamespace};"
+  },
+  "tmp": {
+    "prefix": "tmp",
+    "description": "Template declaration",
+    "body": "template <${1:typename} ${2:T}>"
+  },
+  "tn": {
+    "prefix": "type",
+    "description": "typename",
+    "body": "typename"
+  },
+  "usd": {
+    "prefix": "use",
+    "description": "Using declaration",
+    "body": "using ${1:symbol};"
+  },
+  "usa": {
+    "prefix": "usa",
+    "description": "Using alias",
+    "body": "using ${1:Alias} = ${2:OriginalType};"
+  },
+  "usn": {
+    "prefix": "usn",
+    "description": "Using namespace",
+    "body": "using namespace ${1:Namespace};"
+  },
+  "cls": {
+    "prefix": "cls",
+    "description": "Class declaration",
+    "body": "class ${1:ClassName} {\npublic:\nprivate:\n\t$0\n};"
+  },
+  "doc": {
+    "prefix": "doc",
+    "description": "Doxygen comment block",
+    "body": "/**\n * @brief ${1:Brief description}\n *\n * ${2:Detailed description}\n *\n * @param ${3:parameter} ${4:Parameter description}\n * @return ${5:return value description}\n */\n$0"
+  },
+  "todo": {
+    "prefix": "todo",
+    "description": "TODO comment",
+    "body": "// TODO: ${1:Task description}"
+  },
+  "wip": {
+    "prefix": "wip",
+    "description": "WIP comment",
+    "body": "// WIP: ${1:Work in progress description}"
+  },
+  "mv": {
+    "prefix": "mv",
+    "description": "std::move",
+    "body": "std::move(${1:object})"
+  },
+  "fwd": {
+    "prefix": "fwd",
+    "description": "std::forward",
+    "body": "std::forward<${1:T}>(${2:object})"
+  },
+  "sc": {
+    "prefix": "sc",
+    "description": "static_cast",
+    "body": "static_cast<${1:Type}>(${2:expression})"
+  },
+  "sa": {
+    "prefix": "sa",
+    "description": "static_assert",
+    "body": "static_assert(${1:condition}, \"${2:message}\");"
+  },
+  "u8": {
+    "prefix": "u8",
+    "description": "std::uint8_t",
+    "body": "std::uint8_t"
+  },
+  "u16": {
+    "prefix": "u16",
+    "description": "std::uint16_t",
+    "body": "std::uint16_t"
+  },
+  "u32": {
+    "prefix": "u32",
+    "description": "std::uint32_t",
+    "body": "std::uint32_t"
+  },
+  "u64": {
+    "prefix": "u64",
+    "description": "std::uint64_t",
+    "body": "std::uint64_t"
+  },
+  "i8": {
+    "prefix": "i8",
+    "description": "std::int8_t",
+    "body": "std::int8_t"
+  },
+  "i16": {
+    "prefix": "i16",
+    "description": "std::int16_t",
+    "body": "std::int16_t"
+  },
+  "i32": {
+    "prefix": "i32",
+    "description": "std::int32_t",
+    "body": "std::int32_t"
+  },
+  "i64": {
+    "prefix": "i64",
+    "description": "std::int64_t",
+    "body": "std::int64_t"
+  },
+  "sz": {
+    "prefix": "sz",
+    "description": "std::size_t",
+    "body": "std::size_t"
+  },
+  "f32": {
+    "prefix": "f32",
+    "description": "float",
+    "body": "float"
+  },
+  "f64": {
+    "prefix": "f64",
+    "description": "double",
+    "body": "double"
+  },
+  "sptr": {
+    "prefix": "sptr",
+    "description": "shared pointer",
+    "body": "std::shared_ptr<${1:Type}>"
+  },
+  "uptr": {
+    "prefix": "uptr",
+    "description": "unique pointer",
+    "body": "std::unique_ptr<${1:Type}>"
+  },
+  "wptr": {
+    "prefix": "wptr",
+    "description": "weak pointer",
+    "body": "std::weak_ptr<${1:Type}>"
+  },
+  "ios": {
+    "prefix": "ios",
+    "description": "iostream include",
+    "body": "#include <iostream>"
+  },
+  "math": {
+    "prefix": "math",
+    "description": "cmath include",
+    "body": "#include <cmath>"
+  },
+  "vec": {
+    "prefix": "vec",
+    "description": "vector include",
+    "body": "#include <vector>"
+  },
+  "str": {
+    "prefix": "str",
+    "description": "string include",
+    "body": "#include <string>"
+  },
+  "map": {
+    "prefix": "map",
+    "description": "map include",
+    "body": "#include <map>"
+  },
+  "umap": {
+    "prefix": "umap",
+    "description": "unordered_map include",
+    "body": "#include <unordered_map>"
+  },
+  "set": {
+    "prefix": "set",
+    "description": "set include",
+    "body": "#include <set>"
+  },
+  "uset": {
+    "prefix": "uset",
+    "description": "unordered_set include",
+    "body": "#include <unordered_set>"
+  },
+  "alg": {
+    "prefix": "alg",
+    "description": "algorithm include",
+    "body": "#include <algorithm>"
+  },
+  "fun": {
+    "prefix": "fun",
+    "description": "functional include",
+    "body": "#include <functional>"
+  },
+  "opt": {
+    "prefix": "opt",
+    "description": "optional include",
+    "body": "#include <optional>"
+  }
+}
