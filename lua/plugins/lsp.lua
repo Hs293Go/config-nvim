@@ -105,10 +105,18 @@ return {
 			vim.lsp.enable("texlab")
 
 			-- Lua / TS / CMake
-			vim.lsp.config("lua_ls", {
+			local lua_ls_config = {
 				capabilities = capabilities,
 				settings = { Lua = { diagnostics = { globals = { "vim" } }, telemetry = { enable = false } } },
-			})
+			}
+			-- Prefer the repo-local lua-language-server installed via `make lua-ls`.
+			-- Falls back to whatever's on PATH (or the lspconfig default) if absent.
+			local local_lua_ls =
+				vim.fs.joinpath(vim.fn.stdpath("config"), ".tools/lua_ls/bin/lua-language-server")
+			if vim.fn.executable(local_lua_ls) == 1 then
+				lua_ls_config.cmd = { local_lua_ls }
+			end
+			vim.lsp.config("lua_ls", lua_ls_config)
 			vim.lsp.enable("lua_ls")
 			vim.lsp.config("ts_ls", { capabilities = capabilities })
 			vim.lsp.enable("ts_ls")
