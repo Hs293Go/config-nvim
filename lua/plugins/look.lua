@@ -1,15 +1,20 @@
 return {
 	{
 		"catppuccin/nvim",
+		name = "catppuccin",
+		priority = 1000, -- load before other plugins subscribe to ColorScheme
 		opts = {
-			flavor = "mocha",
+			flavour = "mocha", -- catppuccin uses British spelling
 			transparent_background = true,
 			integrations = {
 				blink_cmp = true,
 			},
 		},
-		config = function()
-			vim.cmd.colorscheme("catppuccin-nvim")
+		config = function(_, opts)
+			-- A custom `config` opts out of lazy.nvim's default
+			-- `require(<plugin>).setup(opts)` — must call setup ourselves.
+			require("catppuccin").setup(opts)
+			vim.cmd.colorscheme("catppuccin-mocha")
 		end,
 	},
 	{
@@ -28,6 +33,12 @@ return {
 				},
 				lualine_z = {}, -- keep it clean (optional)
 			},
+		},
+	},
+	{
+		"rcarriga/nvim-notify",
+		opts = {
+			background_colour = "#000000",
 		},
 	},
 	{
