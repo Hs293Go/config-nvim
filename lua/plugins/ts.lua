@@ -2,6 +2,10 @@
 --   * `branch = "master"` pins the legacy-but-stable API. The `main` branch is
 --     a rewrite with an entirely different setup shape, missing the module
 --     ecosystem we use (textobjects, incremental_selection, indent).
+--   * `commit = ...` is required because upstream master is frozen but
+--     `origin/HEAD -> main`, so `:Lazy update` will otherwise drift the lock to
+--     a `main`-branch commit while keeping `branch = "master"` — leaving a
+--     checkout that lacks `nvim-treesitter.configs`.
 --   * `main = "nvim-treesitter.configs"` tells lazy.nvim's default opts handler
 --     to call `require("nvim-treesitter.configs").setup(opts)` — without it,
 --     lazy.nvim would call `require("nvim-treesitter").setup(opts)` and the
@@ -12,6 +16,7 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		branch = "master",
+		commit = "cf12346a3414fa1b06af75c79faebe7f76df080a",
 		main = "nvim-treesitter.configs",
 		build = ":TSUpdate",
 		event = { "BufReadPost", "BufNewFile" },
@@ -112,6 +117,7 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter-textobjects",
 		branch = "master",
+		commit = "5ca4aaa6efdcc59be46b95a3e876300cfead05ef",
 		lazy = true,
 	},
 }
