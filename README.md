@@ -80,6 +80,21 @@ This is my personal Neovim configuration, which I maintain for my own use and re
 | `<leader>fS` | Symbols (workspace) |
 | `<leader>ft` | Find todo comments |
 
+### List panels (trouble.nvim)
+
+Persistent panels — counterpart to the transient `<leader>f*` fzf pickers.
+Read as "list X". Same suffix letters where the noun matches.
+
+| Key | Action |
+|---|---|
+| `<leader>ld` | List diagnostics (workspace) |
+| `<leader>lD` | List diagnostics (buffer) |
+| `<leader>ls` | List symbols |
+| `<leader>lr` | List LSP refs/defs |
+| `<leader>lt` | List todos |
+| `<leader>lq` | List quickfix |
+| `<leader>lQ` | List loclist |
+
 ### File tree (oil.nvim)
 
 | Key | Action |
