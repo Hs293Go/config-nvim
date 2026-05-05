@@ -11,6 +11,11 @@ return {
 			mode = { "n", "v" },
 			desc = "Format",
 		},
+		{
+			"<leader>if",
+			":ConformInfo<CR>",
+			desc = "Show formatter info",
+		},
 	},
 	opts = function()
 		local opts = {
@@ -27,10 +32,10 @@ return {
 				cpp = { "clang-format", lsp_format = "prefer" },
 				cuda = { "clang-format", lsp_format = "prefer" },
 				toml = { "taplo" },
-				json = { "prettierd", "prettier", stop_after_first = true },
+				json = { "jq", "prettier", stop_after_first = true },
 				jsonc = { "prettierd", "prettier", stop_after_first = true },
 				xml = { "xmllint" },
-				yaml = { "prettierd", "prettier", stop_after_first = true },
+				yaml = { "yamlfmt", "prettier", stop_after_first = true },
 				rust = { "rustfmt" },
 				nix = { "nixfmt" },
 				javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -49,11 +54,16 @@ return {
 			end,
 		}
 
+		opts.formatters = {
+			jq = { append_args = { "--indent", "4" } },
+			latexindent = { append_args = { "--logfile=/dev/null" } },
+		}
+
 		-- Prefer the repo-local stylua installed via `make lua-ls`. Falls back
 		-- to whatever's on PATH if absent.
 		local local_stylua = vim.fs.joinpath(vim.fn.stdpath("config"), ".tools/stylua/bin/stylua")
 		if vim.fn.executable(local_stylua) == 1 then
-			opts.formatters = { stylua = { command = local_stylua } }
+			opts.formatters.stylua = { command = local_stylua }
 		end
 
 		return opts

@@ -87,6 +87,7 @@ return {
 				{ "<leader>c", group = "code" },
 				{ "<leader>f", group = "find/file" },
 				{ "<leader>g", group = "git" },
+				{ "<leader>i", group = "info" },
 				{ "<leader>o", group = "oil" },
 				{ "<leader>q", group = "quit session" },
 				{ "<leader>n", group = "test (neotest)" },
