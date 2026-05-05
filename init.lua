@@ -27,8 +27,16 @@ vim.opt.cursorline = true
 vim.opt.swapfile = false
 vim.opt.foldenable = true
 vim.opt.foldcolumn = "1" -- '0' is not bad
-vim.opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vim.opt.foldlevel = 99 -- start with everything unfolded
 vim.opt.foldlevelstart = 99
+-- Built-in treesitter folding. Works for every filetype that has a parser
+-- with a folds.scm query (rust/lua/python/c/cpp/etc. all ship one in
+-- nvim-treesitter). `foldtext = ""` makes Neovim render the fold's first
+-- line with its real syntax highlighting instead of the legacy
+-- `+--  N lines: ...` summary.
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.lsp.foldexpr()"
+vim.opt.foldtext = ""
 vim.opt.termguicolors = true -- you want this for any modern colorscheme
 vim.opt.scrolloff = 8 -- keep cursor away from the edge
 vim.opt.undofile = true -- persistent undo across sessions

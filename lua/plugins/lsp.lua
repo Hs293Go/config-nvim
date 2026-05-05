@@ -31,10 +31,6 @@ return {
 		config = function()
 			-- 1. Define shared capabilities
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities.textDocument.foldingRange = {
-				dynamicRegistration = false,
-				lineFoldingOnly = true,
-			}
 
 			-- 2. Define our global LSP behavior (the new 'on_attach')
 			vim.api.nvim_create_autocmd("LspAttach", {

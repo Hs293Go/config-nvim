@@ -187,13 +187,6 @@ Inside an Oil buffer: `<CR>` select, `<leader>s`/`<leader>v` open in split, `<C-
 | `<leader>ql` | Restore last session |
 | `<leader>qd` | Don't save current session |
 
-### Folds (nvim-ufo)
-
-| Key | Action |
-|---|---|
-| `zR` | Open all folds |
-| `zM` | Close all folds |
-
 ### Treesitter
 
 | Key | Mode | Action |
