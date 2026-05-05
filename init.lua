@@ -190,6 +190,22 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
+-- Lazygit binds <C-j>/<C-k> to move commits in interactive rebase (and uses
+-- <C-h>/<C-l> for panel navigation), so the global terminal-mode <C-hjkl>
+-- window-nav mappings would steal those keys. Restore them as buffer-local
+-- pass-throughs when the snacks terminal is running lazygit.
+vim.api.nvim_create_autocmd("TermOpen", {
+	callback = function(args)
+		local term = vim.b[args.buf].snacks_terminal
+		if not (term and term.cmd and term.cmd[1] == "lazygit") then
+			return
+		end
+		for _, m in ipairs({ "h", "j", "k", "l" }) do
+			vim.keymap.set("t", "<C-" .. m .. ">", "<C-" .. m .. ">", { buffer = args.buf })
+		end
+	end,
+})
+
 local function augroup(name)
 	return vim.api.nvim_create_augroup("user_" .. name, { clear = true })
 end
