@@ -284,7 +284,6 @@ vim.api.nvim_create_autocmd("FileType", {
 		"gitsigns-blame",
 		"help",
 		"lspinfo",
-		"notify",
 		"qf",
 		"startuptime",
 	},

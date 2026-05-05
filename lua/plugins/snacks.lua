@@ -8,6 +8,7 @@ return {
 				enabled = false,
 				replace_netrw = false,
 			},
+			notifier = { enabled = true },
 			dashboard = {
 				preset = {
 					header = [[
