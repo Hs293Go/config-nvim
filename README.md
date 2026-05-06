@@ -194,6 +194,24 @@ Inside an Oil buffer: `<CR>` select, `<leader>s`/`<leader>v` open in split, `<C-
 | `<C-b>` / `<C-f>` | Scroll docs up / down |
 | `<C-j>` / `<C-k>` | Snippet jump forward / backward |
 
+### UI toggles (snacks.toggle)
+
+Each toggle notifies on/off state via the snacks notifier.
+
+| Key | Toggle |
+|---|---|
+| `<leader>uf` | Auto-format (buffer) |
+| `<leader>uF` | Auto-format (global) |
+| `<leader>us` | Spelling |
+| `<leader>uw` | Wrap |
+| `<leader>ul` | Line numbers |
+| `<leader>uL` | Relative line numbers |
+| `<leader>ud` | Diagnostics |
+| `<leader>uc` | Conceal level |
+| `<leader>uh` | Inlay hints |
+| `<leader>uT` | Treesitter highlight |
+| `<leader>ub` | Background light/dark |
+
 ### Sessions (persistence.nvim)
 
 | Key | Action |

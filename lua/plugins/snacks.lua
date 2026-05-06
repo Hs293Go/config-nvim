@@ -29,6 +29,51 @@ return {
 				},
 			},
 		},
+		config = function(_, opts)
+			require("snacks").setup(opts)
+
+			-- UI toggles under <leader>u*. Each call returns a Snacks.toggle
+			-- handle whose :map(...) wires the keybind, registers the
+			-- description with which-key, and notifies on change via
+			-- Snacks.notifier.
+			local toggle = Snacks.toggle
+			toggle.option("spell", { name = "Spelling" }):map("<leader>us")
+			toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
+			toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
+			toggle.line_number():map("<leader>ul")
+			toggle.diagnostics():map("<leader>ud")
+			toggle.treesitter():map("<leader>uT")
+			toggle.inlay_hints():map("<leader>uh")
+			toggle
+				.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
+				:map("<leader>uc")
+			toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>ub")
+
+			-- Conform autoformat: buffer-local takes precedence over global,
+			-- matching the format_on_save guard in fmt.lua.
+			toggle
+				.new({
+					name = "Auto Format (Global)",
+					get = function()
+						return not vim.g.disable_autoformat
+					end,
+					set = function(state)
+						vim.g.disable_autoformat = not state
+					end,
+				})
+				:map("<leader>uF")
+			toggle
+				.new({
+					name = "Auto Format (Buffer)",
+					get = function()
+						return not (vim.b.disable_autoformat or vim.g.disable_autoformat)
+					end,
+					set = function(state)
+						vim.b.disable_autoformat = not state
+					end,
+				})
+				:map("<leader>uf")
+		end,
 		keys = {
 			{
 				"<C-c>",

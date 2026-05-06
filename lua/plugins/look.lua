@@ -88,6 +88,7 @@ return {
 				{ "<leader>t", group = "tasks" },
 				{ "<leader>tc", group = "cmake" },
 				{ "<leader>tcs", group = "reselect" },
+				{ "<leader>u", group = "ui toggle" },
 				{ "<leader>M", group = "macros" },
 				{ "<leader>fw", group = "grep word", mode = { "n", "v" } },
 			},
