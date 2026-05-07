@@ -126,6 +126,7 @@ return {
 			{ "<leader>il", "<cmd>LspInfo<cr>", desc = "Show LSP info" },
 			{ "<leader>cr", vim.lsp.buf.rename, desc = "LSP: Rename symbol" },
 			{ "<leader>ca", vim.lsp.buf.code_action, desc = "LSP: Code actions", mode = { "n", "v" } },
+			{ "<leader>cd", vim.diagnostic.open_float, desc = "Line diagnostics (float)" },
 			{ "glt", vim.lsp.buf.type_definition, desc = "Type Definition" },
 			{ "glr", vim.lsp.buf.references, desc = "References" },
 			{ "glD", vim.lsp.buf.implementation, desc = "Implementation" },

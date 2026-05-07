@@ -20,6 +20,7 @@ This is my personal Neovim configuration, which I maintain for my own use and re
 | `<leader>w` | | Write |
 | `<leader>W` | | Write all |
 | `<leader>Q` | | Quit all |
+| `<leader>wq` | | Close window or tab (never quits Neovim) |
 | `<leader>m` | | Show `:messages` |
 | `<Esc>` | | Clear search highlight |
 | `<C-/>` | n, v | Toggle line / selection comment |
@@ -53,6 +54,7 @@ This is my personal Neovim configuration, which I maintain for my own use and re
 | `glW` | | Workspace symbols |
 | `<leader>cr` | | Rename symbol |
 | `<leader>ca` | n, v | Code actions |
+| `<leader>cd` | | Line diagnostics (float) |
 | `<leader>cf` | n, v | Format buffer / selection (conform) |
 | `<leader>il` | | `:LspInfo` |
 | `<A-o>` | | Clangd: switch source/header (C/C++ buffers only) |

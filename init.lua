@@ -88,6 +88,18 @@ vim.keymap.set("n", "<leader>w", ":w<CR>", { noremap = true, silent = true, desc
 vim.keymap.set("n", "<leader>W", ":wa<CR>", { noremap = true, silent = true, desc = "Write all" })
 vim.keymap.set("n", "<leader>Q", ":qa<CR>", { noremap = true, silent = true, desc = "Quit all" })
 
+-- Close the current window or tab without ever quitting Neovim. Falls through:
+-- multiple windows in tab → :close; else multiple tabs → :tabclose; else no-op.
+vim.keymap.set("n", "<leader>wq", function()
+	if #vim.api.nvim_tabpage_list_wins(0) > 1 then
+		vim.cmd("close")
+	elseif #vim.api.nvim_list_tabpages() > 1 then
+		vim.cmd("tabclose")
+	else
+		vim.notify("Last window — refusing to quit Neovim", vim.log.levels.WARN)
+	end
+end, { silent = true, desc = "Close window/tab (never Neovim)" })
+
 -- Disable bare q (start-macro) and Q (rerun-last-macro): they conflict with our
 -- quit/close conventions
 vim.keymap.set("n", "q", "<nop>", { desc = "Disabled — use <leader>Mr to record" })
