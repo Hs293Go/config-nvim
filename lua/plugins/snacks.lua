@@ -13,7 +13,21 @@ return {
 			-- param prompts, and anything else calling vim.ui.input gets a real
 			-- floating buffer where <Esc> drops to normal mode for full vim
 			-- editing (motions, registers, undo) before <CR> submits.
+			-- Render the buffer before lazy-loaded plugins finish; faster
+			-- perceived startup on slow CPUs.
+			quickfile = { enabled = true },
+			-- Unified signcolumn + foldcolumn + linenr. Replaces the default
+			-- now that signcolumn="yes" + foldcolumn="1" both want gutter
+			-- space.
+			statuscolumn = { enabled = true },
+			-- Indent guides + scope highlighting (subsumes snacks.scope).
+			indent = { enabled = true },
+			-- Floating UI for vim.ui.input (matches the fzf-lua handling of
+			-- vim.ui.select in nav.lua).
 			input = { enabled = true },
+			-- Highlight other occurrences of the symbol under cursor via LSP
+			-- document highlight (VSCode default behavior).
+			words = { enabled = true },
 			dashboard = {
 				preset = {
 					header = [[
