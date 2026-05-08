@@ -9,6 +9,11 @@ return {
 				replace_netrw = false,
 			},
 			notifier = { enabled = true },
+			-- Buffer-backed `vim.ui.input` — i.e. LSP rename, overseer task
+			-- param prompts, and anything else calling vim.ui.input gets a real
+			-- floating buffer where <Esc> drops to normal mode for full vim
+			-- editing (motions, registers, undo) before <CR> submits.
+			input = { enabled = true },
 			dashboard = {
 				preset = {
 					header = [[
