@@ -59,11 +59,9 @@ return {
 			latexindent = { append_args = { "--logfile=/dev/null" } },
 		}
 
-		-- Prefer the repo-local stylua installed via `make lua-ls`. Falls back
-		-- to whatever's on PATH if absent.
-		local local_stylua = vim.fs.joinpath(vim.fn.stdpath("config"), ".tools/stylua/bin/stylua")
-		if vim.fn.executable(local_stylua) == 1 then
-			opts.formatters.stylua = { command = local_stylua }
+		local stylua_bin = require("config.tools").bin("stylua")
+		if stylua_bin then
+			opts.formatters.stylua = { command = stylua_bin }
 		end
 
 		return opts

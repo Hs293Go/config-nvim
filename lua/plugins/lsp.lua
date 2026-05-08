@@ -26,11 +26,18 @@ return {
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			{ "mrjones2014/codesettings.nvim" },
+			{ "b0o/SchemaStore.nvim" },
 		},
 		lazy = false, -- Load immediately to ensure LSP servers are ready when opening files
 		config = function()
 			-- 1. Define shared capabilities
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+			-- Mini-mason: source for repo-local tool binaries. Already required
+			-- in init.lua (which prepends PATH and registers :ToolInstall /
+			-- :ToolList); the require here just grabs the cached module so
+			-- per-server cmd overrides can use tools.bin(name).
+			local tools = require("config.tools")
 
 			-- 2. Define our global LSP behavior (the new 'on_attach')
 			vim.api.nvim_create_autocmd("LspAttach", {
@@ -105,12 +112,9 @@ return {
 				capabilities = capabilities,
 				settings = { Lua = { diagnostics = { globals = { "vim" } }, telemetry = { enable = false } } },
 			}
-			-- Prefer the repo-local lua-language-server installed via `make lua-ls`.
-			-- Falls back to whatever's on PATH (or the lspconfig default) if absent.
-			local local_lua_ls =
-				vim.fs.joinpath(vim.fn.stdpath("config"), ".tools/lua_ls/bin/lua-language-server")
-			if vim.fn.executable(local_lua_ls) == 1 then
-				lua_ls_config.cmd = { local_lua_ls }
+			local lua_ls_bin = tools.bin("lua_ls")
+			if lua_ls_bin then
+				lua_ls_config.cmd = { lua_ls_bin }
 			end
 			vim.lsp.config("lua_ls", lua_ls_config)
 			vim.lsp.enable("lua_ls")
@@ -118,6 +122,56 @@ return {
 			vim.lsp.enable("ts_ls")
 			vim.lsp.config("cmake", { capabilities = capabilities })
 			vim.lsp.enable("cmake")
+
+			-- Schema-aware servers via the mini-mason in config.tools.
+			-- Servers are only enabled when their binary is resolvable
+			-- (locally installed under .tools/npm/ or available on PATH).
+			-- Run :ToolInstall to bootstrap on a fresh checkout.
+			local jsonls_bin = tools.bin("jsonls")
+			if jsonls_bin then
+				vim.lsp.config("jsonls", {
+					cmd = { jsonls_bin, "--stdio" },
+					capabilities = capabilities,
+					settings = {
+						json = {
+							schemas = require("schemastore").json.schemas(),
+							validate = { enable = true },
+						},
+					},
+				})
+				vim.lsp.enable("jsonls")
+			end
+
+			local yamlls_bin = tools.bin("yamlls")
+			if yamlls_bin then
+				vim.lsp.config("yamlls", {
+					cmd = { yamlls_bin, "--stdio" },
+					capabilities = capabilities,
+					settings = {
+						yaml = {
+							-- Defer schema list to SchemaStore.nvim so the bundled
+							-- yamlls schemaStore (slow, partial) stays disabled.
+							schemaStore = { enable = false, url = "" },
+							schemas = require("schemastore").yaml.schemas(),
+						},
+					},
+				})
+				vim.lsp.enable("yamlls")
+			end
+
+			-- taplo doubles as a TOML formatter (already wired in conform.nvim).
+			-- Running it as an LSP adds Cargo.toml / pyproject.toml schema
+			-- validation and completion on top of the formatting role.
+			local taplo_bin = tools.bin("taplo")
+			if taplo_bin then
+				vim.lsp.config("taplo", {
+					cmd = { taplo_bin, "lsp", "stdio" },
+					capabilities = capabilities,
+				})
+				vim.lsp.enable("taplo")
+			end
+
+			tools.notify_missing_once()
 
 			-- Diagnostics UI
 			vim.diagnostic.config({ virtual_text = true, signs = true, underline = true })
