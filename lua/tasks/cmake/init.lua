@@ -146,7 +146,15 @@ function M.configure(force_preset)
 			name = "cmake: configure (" .. cfg.name .. ")",
 			cmd = driver.configure_cmd(cfg.name),
 			cwd = source_dir(),
-		})
+		}, function(ok)
+			if not ok then
+				return
+			end
+			local linked, err = driver.symlink_compile_commands(cfg.binaryDir, source_dir())
+			if not linked and err then
+				vim.notify("cmake: " .. err, vim.log.levels.WARN)
+			end
+		end)
 	end)
 end
 

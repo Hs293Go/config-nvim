@@ -148,6 +148,46 @@ function M.list_targets(binary_dir, configuration)
 	return out
 end
 
+---Symlink `<binary_dir>/compile_commands.json` to `<source_dir>/compile_commands.json`
+---so clangd (which searches upward from the source) finds it. Refuses to clobber
+---a pre-existing regular file at the destination.
+---@param binary_dir string
+---@param source_dir string
+---@return boolean ok, string? err
+function M.symlink_compile_commands(binary_dir, source_dir)
+	local src = vim.fs.joinpath(binary_dir, "compile_commands.json")
+	if vim.fn.filereadable(src) == 0 then
+		return false, "compile_commands.json not found in " .. binary_dir
+	end
+	local dst = vim.fs.joinpath(source_dir, "compile_commands.json")
+	-- Prefer a relative target so the link survives directory moves when the
+	-- build tree lives under the source tree (the common case).
+	local target = src
+	local prefix = source_dir:gsub("/$", "") .. "/"
+	if src:sub(1, #prefix) == prefix then
+		target = src:sub(#prefix + 1)
+	end
+	local stat = vim.uv.fs_lstat(dst)
+	if stat then
+		if stat.type ~= "link" then
+			return false, dst .. " exists and is not a symlink; leaving it alone"
+		end
+		local existing = vim.uv.fs_readlink(dst)
+		if existing == target then
+			return true
+		end
+		local ok_unlink, unlink_err = vim.uv.fs_unlink(dst)
+		if not ok_unlink then
+			return false, "could not replace existing symlink: " .. (unlink_err or "?")
+		end
+	end
+	local ok, sym_err = vim.uv.fs_symlink(target, dst)
+	if not ok then
+		return false, "symlink failed: " .. (sym_err or "?")
+	end
+	return true
+end
+
 ---Resolve an executable artifact path for a target. Returns absolute path.
 ---@param target CMakeTarget
 ---@param binary_dir string
