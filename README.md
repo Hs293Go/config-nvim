@@ -82,6 +82,13 @@ This is my personal Neovim configuration, which I maintain for my own use and re
 | `<leader>fS` | Symbols (workspace) |
 | `<leader>ft` | Find todo comments |
 
+### Search & replace (grug-far.nvim)
+
+| Key | Mode | Action |
+|---|---|---|
+| `<leader>sr` | | Open grug-far search & replace |
+| `<leader>sr` | v | Open grug-far seeded with the visual selection |
+
 ### List panels (trouble.nvim)
 
 Persistent panels — counterpart to the transient `<leader>f*` fzf pickers.

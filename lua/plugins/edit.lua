@@ -14,4 +14,26 @@ return {
 		event = "InsertEnter",
 		opts = {},
 	},
+	{
+		"MagicDuck/grug-far.nvim",
+		cmd = "GrugFar",
+		opts = {},
+		keys = {
+			{
+				"<leader>sr",
+				function()
+					require("grug-far").open()
+				end,
+				desc = "Search & replace (grug-far)",
+			},
+			{
+				"<leader>sr",
+				function()
+					require("grug-far").with_visual_selection()
+				end,
+				mode = "v",
+				desc = "Search & replace selection (grug-far)",
+			},
+		},
+	},
 }

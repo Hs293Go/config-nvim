@@ -76,6 +76,7 @@ return {
 				zindex = 1000,
 			},
 			spec = {
+				{ "gl", group = "goto (LSP)" },
 				{ "<leader>a", group = "AI" },
 				{ "<leader>c", group = "code" },
 				{ "<leader>f", group = "find/file" },
@@ -85,6 +86,7 @@ return {
 				{ "<leader>o", group = "oil" },
 				{ "<leader>q", group = "quit session" },
 				{ "<leader>n", group = "test (neotest)" },
+				{ "<leader>s", group = "search" },
 				{ "<leader>t", group = "tasks" },
 				{ "<leader>tc", group = "cmake" },
 				{ "<leader>tcs", group = "reselect" },
