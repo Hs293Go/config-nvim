@@ -17,7 +17,11 @@ return {
 	{
 		"MagicDuck/grug-far.nvim",
 		cmd = "GrugFar",
-		opts = {},
+		opts = {
+			keymaps = {
+				close = { n = "q" },
+			},
+		},
 		keys = {
 			{
 				"<leader>sr",

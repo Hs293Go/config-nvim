@@ -88,6 +88,7 @@ This is my personal Neovim configuration, which I maintain for my own use and re
 |---|---|---|
 | `<leader>sr` | | Open grug-far search & replace |
 | `<leader>sr` | v | Open grug-far seeded with the visual selection |
+| `q` | | (Inside grug-far) close the window |
 
 ### List panels (trouble.nvim)
 
