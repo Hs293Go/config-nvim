@@ -27,11 +27,21 @@ return {
 		dependencies = {
 			{ "mrjones2014/codesettings.nvim" },
 			{ "b0o/SchemaStore.nvim" },
+			-- Declared so blink.cmp loads first and its enhanced LSP
+			-- capabilities (snippet support, resolve, additional kinds) are
+			-- already injected into vim.lsp.config("*") by the time the
+			-- per-server config calls below run.
+			{ "saghen/blink.cmp" },
 		},
 		lazy = false, -- Load immediately to ensure LSP servers are ready when opening files
 		config = function()
-			-- 1. Define shared capabilities
-			local capabilities = vim.lsp.protocol.make_client_capabilities()
+			-- 1. Define shared capabilities. Use blink.cmp's enhanced set
+			-- (Neovim defaults + completion-item resolve / snippet support /
+			-- additional item kinds). Without this, every per-server
+			-- vim.lsp.config(name, { capabilities = capabilities }) below
+			-- deep-merge-overrides blink.cmp's wildcard injection — servers
+			-- silently drop back to bare protocol defaults.
+			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
 			-- Mini-mason: source for repo-local tool binaries. Already required
 			-- in init.lua (which prepends PATH and registers :ToolInstall /
