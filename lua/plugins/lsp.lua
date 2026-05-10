@@ -48,6 +48,10 @@ return {
 					if not client then
 						return
 					end
+					if client:supports_method("textDocument/foldingRange") then
+						vim.wo.foldmethod = "expr"
+						vim.wo.foldexpr = "v:lua.vim.lsp.foldexpr()"
+					end
 
 					-- Server-specific logic inside LspAttach
 					if client.name == "clangd" then
