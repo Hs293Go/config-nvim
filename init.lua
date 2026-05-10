@@ -88,9 +88,26 @@ vim.keymap.set("n", "<leader>w", ":w<CR>", { noremap = true, silent = true, desc
 vim.keymap.set("n", "<leader>W", ":wa<CR>", { noremap = true, silent = true, desc = "Write all" })
 vim.keymap.set("n", "<leader>Q", ":qa<CR>", { noremap = true, silent = true, desc = "Quit all" })
 
--- Close the current window or tab without ever quitting Neovim. Falls through:
--- multiple windows in tab → :close; else multiple tabs → :tabclose; else no-op.
+-- Close the current window or tab without ever quitting Neovim, and refuse if
+-- it would leave the session with only side-panels (terminals, oil, trouble,
+-- task lists…). A "file window" is any window whose buffer has empty buftype.
+local function is_file_window(win)
+	local buf = vim.api.nvim_win_get_buf(win)
+	return vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buftype == ""
+end
+
 vim.keymap.set("n", "<leader>wq", function()
+	local cur = vim.api.nvim_get_current_win()
+	local file_wins_after = 0
+	for _, w in ipairs(vim.api.nvim_list_wins()) do
+		if w ~= cur and is_file_window(w) then
+			file_wins_after = file_wins_after + 1
+		end
+	end
+	if file_wins_after < 1 then
+		vim.notify("Refusing — no other file-editing window would remain", vim.log.levels.WARN)
+		return
+	end
 	if #vim.api.nvim_tabpage_list_wins(0) > 1 then
 		vim.cmd("close")
 	elseif #vim.api.nvim_list_tabpages() > 1 then
