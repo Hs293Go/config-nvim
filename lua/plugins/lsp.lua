@@ -188,6 +188,18 @@ return {
 				vim.lsp.enable("yamlls")
 			end
 
+			-- bashls supplements shellcheck (already running via nvim-lint).
+			-- bashls adds hover, jump-to-definition for variables/functions,
+			-- and completion that shellcheck-as-a-linter can't provide.
+			local bashls_bin = tools.bin("bashls")
+			if bashls_bin then
+				vim.lsp.config("bashls", {
+					cmd = { bashls_bin, "start" },
+					capabilities = capabilities,
+				})
+				vim.lsp.enable("bashls")
+			end
+
 			-- taplo doubles as a TOML formatter (already wired in conform.nvim).
 			-- Running it as an LSP adds Cargo.toml / pyproject.toml schema
 			-- validation and completion on top of the formatting role.

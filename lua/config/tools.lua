@@ -60,6 +60,10 @@ M.registry = {
 		npm = "prettier",
 		bin = "prettier",
 	},
+	bashls = {
+		npm = "bash-language-server",
+		bin = "bash-language-server",
+	},
 	-- github provider: GitHub-release downloads, version-pinned.
 	lua_ls = {
 		provider = "github",
