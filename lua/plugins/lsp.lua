@@ -238,7 +238,9 @@ return {
 			{ "glD", vim.lsp.buf.implementation, desc = "Implementation" },
 			{ "glo", vim.lsp.buf.document_symbol, desc = "Document Symbols" },
 			{ "glW", vim.lsp.buf.workspace_symbol, desc = "Workspace Symbols" },
-			{ "gd", vim.lsp.buf.definition, desc = "LSP go to definition" },
+			-- gd is intentionally bound by fzf-lua (nav.lua) to lsp_definitions
+			-- with jump1=true. The bare g* family lives in fzf-lua; gl* is the
+			-- direct-LSP counterpart kept here for keymap symmetry.
 		},
 	},
 }
