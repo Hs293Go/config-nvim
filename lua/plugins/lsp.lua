@@ -76,6 +76,21 @@ return {
 					if client.name == "ruff" then
 						client.server_capabilities.hoverProvider = false
 					end
+
+					-- Code lens: refresh on attach + on buffer activity.
+					-- rust-analyzer (Run | Debug above tests), ts_ls
+					-- (reference counts), gopls (test runners) all use it.
+					if client:supports_method("textDocument/codeLens") then
+						vim.lsp.codelens.refresh({ bufnr = bufnr })
+						local g = vim.api.nvim_create_augroup("user_codelens_" .. bufnr, { clear = true })
+						vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave", "BufWritePost" }, {
+							group = g,
+							buffer = bufnr,
+							callback = function()
+								vim.lsp.codelens.refresh({ bufnr = bufnr })
+							end,
+						})
+					end
 				end,
 			})
 			vim.lsp.config("*", {
@@ -205,6 +220,7 @@ return {
 			{ "<leader>cr", vim.lsp.buf.rename, desc = "LSP: Rename symbol" },
 			{ "<leader>ca", vim.lsp.buf.code_action, desc = "LSP: Code actions", mode = { "n", "v" } },
 			{ "<leader>cd", vim.diagnostic.open_float, desc = "Line diagnostics (float)" },
+			{ "<leader>cl", vim.lsp.codelens.run, desc = "Run code lens" },
 			{ "glt", vim.lsp.buf.type_definition, desc = "Type Definition" },
 			{ "glr", vim.lsp.buf.references, desc = "References" },
 			{ "glD", vim.lsp.buf.implementation, desc = "Implementation" },

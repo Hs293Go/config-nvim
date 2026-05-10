@@ -56,6 +56,7 @@ This is my personal Neovim configuration, which I maintain for my own use and re
 | `<leader>ca` | n, v | Code actions |
 | `<leader>cd` | | Line diagnostics (float) |
 | `<leader>cf` | n, v | Format buffer / selection (conform) |
+| `<leader>cl` | | Run code lens (under cursor) |
 | `<leader>il` | | `:LspInfo` |
 | `<A-o>` | | Clangd: switch source/header (C/C++ buffers only) |
 
