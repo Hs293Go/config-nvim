@@ -30,6 +30,9 @@ return {
 					enabled = false, -- Reserve ghost test for AI autosuggestion only
 				},
 			},
+			-- Show parameter hints while typing inside a function call.
+			-- VSCode-default behavior; closes the last big completion-UI gap.
+			signature = { enabled = true },
 			snippets = { preset = "luasnip" },
 			sources = {
 				default = { "lsp", "path", "snippets" },
