@@ -188,7 +188,17 @@ return {
 			tools.notify_missing_once()
 
 			-- Diagnostics UI
-			vim.diagnostic.config({ virtual_text = true, signs = true, underline = true })
+			vim.diagnostic.config({
+				virtual_text = { source = "if_many", spacing = 2 },
+				signs = true,
+				underline = true,
+				-- Errors paint over warnings on the same line; quieter signs.
+				severity_sort = true,
+				-- Don't churn diagnostics while typing — perf win on Jetson,
+				-- and matches VSCode's "save to validate" feel for most LSPs.
+				update_in_insert = false,
+				float = { border = "rounded", source = "if_many" },
+			})
 		end,
 		keys = {
 			{ "<leader>il", "<cmd>LspInfo<cr>", desc = "Show LSP info" },
