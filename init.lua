@@ -84,6 +84,30 @@ vim.keymap.set("n", "<leader>w", ":w<CR>", { noremap = true, silent = true, desc
 vim.keymap.set("n", "<leader>W", ":wa<CR>", { noremap = true, silent = true, desc = "Write all" })
 vim.keymap.set("n", "<leader>Q", ":qa<CR>", { noremap = true, silent = true, desc = "Quit all" })
 
+vim.keymap.set("n", "]e", function()
+	vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR })
+end, {
+	desc = "Next error",
+})
+
+vim.keymap.set("n", "[e", function()
+	vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR })
+end, {
+	desc = "Prev error",
+})
+
+vim.keymap.set("n", "]w", function()
+	vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.WARN })
+end, {
+	desc = "Next warning",
+})
+
+vim.keymap.set("n", "[w", function()
+	vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.WARN })
+end, {
+	desc = "Prev warning",
+})
+
 -- Close the current window or tab without ever quitting Neovim, and refuse if
 -- it would leave the session with only side-panels (terminals, oil, trouble,
 -- task lists…). A "file window" is any window whose buffer has empty buftype.

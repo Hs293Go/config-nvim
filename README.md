@@ -55,6 +55,9 @@ This is my personal Neovim configuration, which I maintain for my own use and re
 | `<leader>cr` | | Rename symbol |
 | `<leader>ca` | n, v | Code actions |
 | `<leader>cd` | | Line diagnostics (float) |
+| `]d` / `[d` | | Next / prev diagnostic (any severity; Neovim default) |
+| `]e` / `[e` | | Next / prev error |
+| `]w` / `[w` | | Next / prev warning |
 | `<leader>cf` | n, v | Format buffer / selection (conform) |
 | `<leader>cl` | | Run code lens (under cursor) |
 | `<leader>il` | | `:LspInfo` |
