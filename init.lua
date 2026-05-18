@@ -84,6 +84,8 @@ vim.keymap.set("n", "<leader>w", ":w<CR>", { noremap = true, silent = true, desc
 vim.keymap.set("n", "<leader>W", ":wa<CR>", { noremap = true, silent = true, desc = "Write all" })
 vim.keymap.set("n", "<leader>Q", ":qa<CR>", { noremap = true, silent = true, desc = "Quit all" })
 
+vim.keymap.set({ "n", "v" }, "<leader>ii", ":Inspect<CR>", { noremap = true, silent = true, desc = "inspect" })
+
 vim.keymap.set("n", "]e", function()
 	vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR })
 end, {
