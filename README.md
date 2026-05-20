@@ -151,6 +151,7 @@ Inside an Oil buffer: `<CR>` select, `<leader>s`/`<leader>v` open in split, `<C-
 |---|---|
 | `<leader>tr` | Run task (picker) |
 | `<leader>tt` | Toggle task list |
+| `<leader>tl` | Rerun last task |
 | `<leader>tj` | just: pick and run recipe |
 | `<leader>tcc` | CMake: configure |
 | `<leader>tcb` / `<leader>Cb` | CMake: build |

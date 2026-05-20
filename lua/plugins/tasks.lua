@@ -26,6 +26,19 @@ return {
 			-- Picker / panel (canonical)
 			{ "<leader>tr", "<cmd>OverseerRun<cr>", desc = "Run task (picker)" },
 			{ "<leader>tt", "<cmd>OverseerToggle<cr>", desc = "Toggle task list" },
+			{
+				"<leader>tl",
+				function()
+					local overseer = require("overseer")
+					local tasks = overseer.list_tasks({ recent_first = true })
+					if vim.tbl_isempty(tasks) then
+						vim.notify("No overseer tasks to rerun", vim.log.levels.WARN)
+						return
+					end
+					overseer.run_action(tasks[1], "restart")
+				end,
+				desc = "Rerun last task",
+			},
 
 			-- just: dynamic recipes; bypass overseer's template registry
 			{
