@@ -24,6 +24,12 @@ return {
 			"nvim-treesitter/nvim-treesitter-textobjects",
 		},
 		opts = {
+			-- Parser compilation needs a working C toolchain. Stock L4T images
+			-- ship without one, so auto_install just produces error popups on
+			-- every BufRead of an un-compiled filetype. The user installs
+			-- parsers manually there via `:TSInstall <lang>` after wiring up a
+			-- compiler.
+			auto_install = not require("config.platform").is_jetson(),
 			ensure_installed = {
 				-- systems languages
 				"c",
@@ -63,7 +69,6 @@ return {
 				"query",
 				"regex",
 			},
-			auto_install = true,
 			highlight = {
 				enable = true,
 				additional_vim_regex_highlighting = false,

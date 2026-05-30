@@ -298,8 +298,15 @@ function M.install_missing()
 	end
 end
 
--- Notify-once on tools nowhere available (neither local nor PATH).
+-- Notify-once on tools nowhere available (neither local nor PATH). Skipped on
+-- Jetson — npm / GitHub release downloads aren't a practical install path on
+-- stock L4T images (no node, slow network), and the warning fires every
+-- startup with no remediation the user wants to take. :ToolList still reports
+-- status on demand.
 function M.notify_missing_once()
+	if require("config.platform").is_jetson() then
+		return
+	end
 	local missing = M.missing()
 	if #missing > 0 then
 		vim.schedule(function()

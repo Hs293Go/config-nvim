@@ -32,7 +32,9 @@ return {
 			},
 			-- Show parameter hints while typing inside a function call.
 			-- VSCode-default behavior; closes the last big completion-UI gap.
-			signature = { enabled = true },
+			-- Disabled on Jetson: an extra textDocument/signatureHelp request
+			-- per character is too much LSP traffic on the platform.
+			signature = { enabled = not require("config.platform").is_jetson() },
 			snippets = { preset = "luasnip" },
 			sources = {
 				default = { "lsp", "path", "snippets" },
