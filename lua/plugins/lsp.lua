@@ -213,18 +213,6 @@ return {
 				vim.lsp.enable("bashls")
 			end
 
-			-- taplo doubles as a TOML formatter (already wired in conform.nvim).
-			-- Running it as an LSP adds Cargo.toml / pyproject.toml schema
-			-- validation and completion on top of the formatting role.
-			local taplo_bin = tools.bin("taplo")
-			if taplo_bin then
-				vim.lsp.config("taplo", {
-					cmd = { taplo_bin, "lsp", "stdio" },
-					capabilities = capabilities,
-				})
-				vim.lsp.enable("taplo")
-			end
-
 			tools.notify_missing_once()
 
 			-- Diagnostics UI
