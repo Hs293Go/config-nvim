@@ -84,6 +84,17 @@ return {
 						client.server_capabilities.hoverProvider = false
 					end
 
+					-- texlab: vimtex owns LaTeX editing (compile, view, errors,
+					-- completion). Keep texlab around purely for cross-reference
+					-- navigation (definitions, references, symbols, hover) and
+					-- mute everything else so the two don't fight.
+					if client.name == "texlab" then
+						client.server_capabilities.completionProvider = nil
+						client.server_capabilities.documentFormattingProvider = nil
+						client.server_capabilities.documentRangeFormattingProvider = nil
+						client.handlers["textDocument/publishDiagnostics"] = function() end
+					end
+
 					-- Code lens: refresh on attach + on buffer activity.
 					-- rust-analyzer (Run | Debug above tests), ts_ls
 					-- (reference counts), gopls (test runners) all use it.
@@ -137,16 +148,10 @@ return {
 			vim.lsp.config("ty", { capabilities = capabilities })
 			vim.lsp.enable("ty")
 
-			-- LaTeX
-			vim.lsp.config("texlab", {
-				capabilities = capabilities,
-				settings = {
-					texlab = {
-						build = { executable = "", onSave = false },
-						chktex = { onOpenAndSave = true, onEdit = true },
-					},
-				},
-			})
+			-- LaTeX — texlab is kept purely as a navigation backend (go-to-label,
+			-- references, symbols, hover). Build/view/diagnostics/completion are
+			-- vimtex's job; the LspAttach branch above mutes the rest.
+			vim.lsp.config("texlab", { capabilities = capabilities })
 			vim.lsp.enable("texlab")
 
 			-- Lua / TS / CMake
