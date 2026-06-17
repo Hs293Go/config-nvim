@@ -120,6 +120,8 @@ Read as "list X". Same suffix letters where the noun matches.
 
 Inside an Oil buffer: `<CR>` select, `<leader>s`/`<leader>v` open in split, `<C-t>` open in tab, `<C-p>` preview, `<C-l>` refresh, `<bs>` parent, `_` cwd, `` ` `` cd, `g~` cd (tab), `gs` change sort, `gx` open external, `g.` toggle hidden, `g\` toggle trash, `g?` help, `q` close.
 
+Git integration: the signcolumn shows two-char index/worktree status (`M`/`A`/`D`/`??` etc. — same alphabet as `git status --short`). Renaming a tracked file in the buffer uses `git mv` (history follows); deleting one uses `git rm` (stages the delete). New files are not auto-staged.
+
 ### Git
 
 | Key | Mode | Action |

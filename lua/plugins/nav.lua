@@ -1,3 +1,25 @@
+local oil_setup_git = function()
+	local function is_tracked(path)
+		local dir = vim.fn.isdirectory(path) == 1 and path or vim.fs.dirname(path)
+		if not dir or dir == "" then
+			return false
+		end
+		local result = vim.system({ "git", "-C", dir, "ls-files", "--error-unmatch", "--", path }, { text = true })
+			:wait()
+		return result.code == 0
+	end
+	return {
+		add = function(_path)
+			return false
+		end,
+		mv = function(src_path, _dest_path)
+			return is_tracked(src_path)
+		end,
+		rm = function(path)
+			return is_tracked(path)
+		end,
+	}
+end
 return {
 	{
 		"ibhagwan/fzf-lua",
@@ -341,7 +363,9 @@ return {
 			-- Window-local options to use for oil buffers
 			win_options = {
 				wrap = false,
-				signcolumn = "no",
+				-- yes:2 leaves room for oil-git-status.nvim's two-char
+				-- index/worktree status marker.
+				signcolumn = "yes:2",
 				cursorcolumn = false,
 				foldcolumn = "0",
 				spell = false,
@@ -434,19 +458,15 @@ return {
 			extra_scp_args = {},
 			-- Extra arguments to pass to aws s3 when creating/deleting/moving/copying files using aws s3
 			extra_s3_args = {},
-			-- EXPERIMENTAL support for performing file operations with git
-			git = {
-				-- Return true to automatically git add/mv/rm files
-				add = function(path)
-					return true
-				end,
-				mv = function(src_path, dest_path)
-					return true
-				end,
-				rm = function(path)
-					return true
-				end,
-			},
+			-- Git integration: route rename / delete of tracked files through
+			-- `git mv` / `git rm` so history follows the rename and the delete
+			-- lands staged. `add` stays manual — auto-staging new files
+			-- silently grows the index and hides intent.
+			--
+			-- The tracked-status probe is a synchronous `git ls-files`. Oil
+			-- only invokes these on user-saved file ops (the `:w` after edits
+			-- in the oil buffer), so the cost is per-operation, not per-render.
+			git = oil_setup_git(),
 			-- Configuration for the floating window in oil.open_float
 			float = {
 				-- Padding around the floating window
@@ -509,6 +529,19 @@ return {
 			keymaps_help = {
 				border = nil,
 			},
+		},
+	},
+	{
+		-- VSCode-parity git status indicators in oil listings: M / A / D / ??
+		-- (index + worktree, two chars) render in the signcolumn, mirroring
+		-- `git status --short`. Must be set up *after* oil.setup(): its setup
+		-- reads require("oil.config").win_options, which is nil until then.
+		-- Hence it depends on oil (not the reverse). No keybinds of its own.
+		"refractalize/oil-git-status.nvim",
+		dependencies = { "stevearc/oil.nvim" },
+		lazy = false,
+		opts = {
+			show_ignored = false,
 		},
 	},
 	{ -- Counts as navigation since it provides quick jumping to important comments in the code
