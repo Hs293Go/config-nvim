@@ -126,56 +126,100 @@ local function ensure_build_preset(force, cb)
 	end)
 end
 
+---True once `cmake --preset` has fully configured + generated the build tree. A
+---bare `cmake --build` cannot bootstrap one, so callers gate on this.
+---
+---We test for the File API reply, not CMakeCache.txt: the cache is written early
+---and SURVIVES a failed configure, so it would mark a half-generated tree (no
+---build.ninja) as ready and let the build run straight into a ninja "No such
+---file" error. The reply is emitted only when generate completes — the same
+---moment the generator's build files appear — and `run_configure` always drops
+---the query file that requests it.
+---@param binary_dir string?
+---@return boolean
+local function is_configured(binary_dir)
+	if not binary_dir or binary_dir == "" then
+		return false
+	end
+	local reply_dir = vim.fs.joinpath(binary_dir, ".cmake/api/v1/reply")
+	return vim.fn.isdirectory(reply_dir) == 1 and not vim.tbl_isempty(vim.fn.readdir(reply_dir))
+end
+
+---Run the actual configure for an already-resolved preset: ensure binaryDir,
+---drop the File API query file, run `cmake --preset`, then symlink
+---compile_commands.json. Fires `on_done(success)` when finished.
+---@param cfg CMakeConfigurePreset
+---@param on_done? fun(ok: boolean)
+local function run_configure(cfg, on_done)
+	if not cfg.binaryDir or cfg.binaryDir == "" then
+		vim.notify("preset " .. cfg.name .. " has no binaryDir", vim.log.levels.ERROR)
+		if on_done then
+			on_done(false)
+		end
+		return
+	end
+	if vim.fn.isdirectory(cfg.binaryDir) == 0 then
+		vim.fn.mkdir(cfg.binaryDir, "p")
+	end
+	driver.write_query_file(cfg.binaryDir)
+	run({
+		name = "cmake: configure (" .. cfg.name .. ")",
+		cmd = driver.configure_cmd(cfg.name),
+		cwd = source_dir(),
+	}, function(ok)
+		if ok then
+			local linked, msg = driver.symlink_compile_commands(cfg.binaryDir, source_dir())
+			if msg then
+				vim.notify("cmake: " .. msg, linked and vim.log.levels.INFO or vim.log.levels.WARN)
+			end
+		end
+		if on_done then
+			on_done(ok)
+		end
+	end)
+end
+
 ---Configure (cmake --preset). Drops a File API query file before running so
 ---list_targets works after.
 ---@param force_preset? boolean
 function M.configure(force_preset)
 	ensure_configure_preset(force_preset or false, function(cfg)
-		if not cfg then
-			return
+		if cfg then
+			run_configure(cfg)
 		end
-		if not cfg.binaryDir or cfg.binaryDir == "" then
-			vim.notify("preset " .. cfg.name .. " has no binaryDir", vim.log.levels.ERROR)
-			return
-		end
-		if vim.fn.isdirectory(cfg.binaryDir) == 0 then
-			vim.fn.mkdir(cfg.binaryDir, "p")
-		end
-		driver.write_query_file(cfg.binaryDir)
-		run({
-			name = "cmake: configure (" .. cfg.name .. ")",
-			cmd = driver.configure_cmd(cfg.name),
-			cwd = source_dir(),
-		}, function(ok)
-			if not ok then
-				return
-			end
-			local linked, err = driver.symlink_compile_commands(cfg.binaryDir, source_dir())
-			if not linked and err then
-				vim.notify("cmake: " .. err, vim.log.levels.WARN)
-			end
-		end)
 	end)
 end
 
----Build via cmake --build --preset. Triggers configure-preset pick if
----needed, build-preset pick if needed.
+---Build via cmake --build --preset. Triggers configure-preset pick if needed,
+---build-preset pick if needed, and configures the build tree first when it
+---hasn't been configured yet (a bare `cmake --build` can't bootstrap one).
 ---@param force_build_preset? boolean
 ---@param on_built? fun()  fires only on successful build
 function M.build(force_build_preset, on_built)
-	ensure_build_preset(force_build_preset or false, function(b, _cfg)
+	ensure_build_preset(force_build_preset or false, function(b, cfg)
 		if not b then
 			return
 		end
-		run({
-			name = "cmake: build (" .. b.name .. ")",
-			cmd = driver.build_cmd(b.name),
-			cwd = source_dir(),
-		}, function(ok)
-			if ok and on_built then
-				on_built()
-			end
-		end)
+		local function do_build()
+			run({
+				name = "cmake: build (" .. b.name .. ")",
+				cmd = driver.build_cmd(b.name),
+				cwd = source_dir(),
+			}, function(ok)
+				if ok and on_built then
+					on_built()
+				end
+			end)
+		end
+		if is_configured(cfg.binaryDir) then
+			do_build()
+		else
+			run_configure(cfg, function(ok)
+				if ok then
+					do_build()
+				end
+			end)
+		end
 	end)
 end
 

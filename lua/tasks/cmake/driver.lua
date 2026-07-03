@@ -151,13 +151,18 @@ end
 ---Symlink `<binary_dir>/compile_commands.json` to `<source_dir>/compile_commands.json`
 ---so clangd (which searches upward from the source) finds it. Refuses to clobber
 ---a pre-existing regular file at the destination.
+---
+---Returns (ok, msg). `msg` is nil when the link was already correct (nothing
+---worth reporting), an info string when the link was (re)created, or an error
+---string when it could not link — letting the caller surface a precise reason
+---instead of failing silently.
 ---@param binary_dir string
 ---@param source_dir string
----@return boolean ok, string? err
+---@return boolean ok, string? msg
 function M.symlink_compile_commands(binary_dir, source_dir)
 	local src = vim.fs.joinpath(binary_dir, "compile_commands.json")
 	if vim.fn.filereadable(src) == 0 then
-		return false, "compile_commands.json not found in " .. binary_dir
+		return false, "compile_commands.json not found in " .. binary_dir .. " (did the generator export it?)"
 	end
 	local dst = vim.fs.joinpath(source_dir, "compile_commands.json")
 	-- Prefer a relative target so the link survives directory moves when the
@@ -170,11 +175,11 @@ function M.symlink_compile_commands(binary_dir, source_dir)
 	local stat = vim.uv.fs_lstat(dst)
 	if stat then
 		if stat.type ~= "link" then
-			return false, dst .. " exists and is not a symlink; leaving it alone"
+			return false, dst .. " exists and is not a symlink; remove it to enable the clangd database link"
 		end
 		local existing = vim.uv.fs_readlink(dst)
 		if existing == target then
-			return true
+			return true -- already correct; nothing to report
 		end
 		local ok_unlink, unlink_err = vim.uv.fs_unlink(dst)
 		if not ok_unlink then
@@ -185,7 +190,7 @@ function M.symlink_compile_commands(binary_dir, source_dir)
 	if not ok then
 		return false, "symlink failed: " .. (sym_err or "?")
 	end
-	return true
+	return true, "linked compile_commands.json → " .. target
 end
 
 ---Resolve an executable artifact path for a target. Returns absolute path.
