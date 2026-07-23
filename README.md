@@ -248,6 +248,7 @@ Each toggle notifies on/off state via the snacks notifier.
 | `]F` / `[F` | | Next / prev function end |
 | `]c` / `[c` | | Next / prev class start |
 | `]C` / `[C` | | Next / prev class end |
+| `[x` | n | Jump up to enclosing context (nvim-treesitter-context; accepts a count) |
 
 ### Misc navigation
 

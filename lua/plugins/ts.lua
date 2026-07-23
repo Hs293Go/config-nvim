@@ -125,4 +125,42 @@ return {
 		commit = "5ca4aaa6efdcc59be46b95a3e876300cfead05ef",
 		lazy = true,
 	},
+	{
+		-- Pins the enclosing scope's header line(s) — the function/class/loop
+		-- you're currently inside — to the top of the window while you scroll
+		-- through its body. Reuses the same parsers configured above, so it
+		-- needs nvim-treesitter loaded first.
+		"nvim-treesitter/nvim-treesitter-context",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		event = { "BufReadPost", "BufNewFile" },
+		keys = {
+			{
+				"[x",
+				function()
+					require("treesitter-context").go_to_context(vim.v.count1)
+				end,
+				mode = "n",
+				desc = "Jump up to enclosing context",
+			},
+		},
+		-- The module lives at `lua/treesitter-context.lua`, not a path lazy.nvim
+		-- can derive from the repo name, so name it explicitly (same reason the
+		-- nvim-treesitter spec above sets `main`).
+		main = "treesitter-context",
+		opts = {
+			-- Cap the sticky header so deeply-nested code can't eat the
+			-- viewport; 3 lines fits a signature plus one enclosing scope.
+			max_lines = 3,
+			-- When over max_lines, trim the innermost context first and keep
+			-- the outermost (most orienting) scope visible.
+			trim_scope = "outer",
+			-- Track the scope under the cursor, not the topmost visible line.
+			mode = "cursor",
+			-- Underline the context so it reads as a pinned header.
+			separator = "─",
+			-- Don't repeat each pinned line's real buffer line number in the
+			-- gutter; keep the header uncluttered.
+			line_numbers = false,
+		},
+	},
 }
