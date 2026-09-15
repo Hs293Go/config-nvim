@@ -38,9 +38,21 @@ return {
 			{
 				"<leader>sg",
 				function()
-					require("fzf-lua").live_grep()
+					require("fzf-lua").live_grep({ winopts = { title = "Grep (cwd)" } })
 				end,
-				desc = "Grep",
+				desc = "Grep (cwd)",
+			},
+			{
+				"<leader>sG",
+				function()
+					local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")
+					if #git_root == 0 then
+						vim.notify("Not in a git repository!", vim.log.levels.ERROR)
+						return
+					end
+					require("fzf-lua").live_grep({ cwd = git_root[1], winopts = { title = "Grep (git root)" } })
+				end,
+				desc = "Grep (git root)",
 			},
 			{
 				"<leader>fw",
@@ -275,6 +287,19 @@ return {
 					oil.open(vim.fn.getcwd())
 				end,
 				desc = "Open Oil (vsplit)",
+			},
+			{
+				"<leader>og",
+				function()
+					local oil = require("oil")
+					local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")
+					if #git_root == 0 then
+						vim.notify("Not in a git repository!", vim.log.levels.ERROR)
+						return
+					end
+					oil.open_float(git_root[1])
+				end,
+				desc = "Open Oil (git root)",
 			},
 			{
 				"<leader>of",
