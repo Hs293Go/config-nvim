@@ -55,7 +55,6 @@ return {
 		}
 
 		opts.formatters = {
-			jq = { append_args = { "--indent", "4" } },
 			latexindent = { append_args = { "--logfile=/dev/null", "--yaml", 'defaultIndent: "    "' } },
 		}
 
