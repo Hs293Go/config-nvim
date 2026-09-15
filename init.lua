@@ -152,6 +152,10 @@ for _, m in ipairs({ "h", "j", "k", "l" }) do
 	-- Pressing Ctrl+motion navigates windows, including from terminal panes
 	vim.keymap.set({ "n", "x", "t" }, "<C-" .. m .. ">", "<cmd>wincmd " .. m .. "<cr>", { silent = true })
 end
+vim.keymap.set({ "n", "x", "t" }, "<C-S-,>", "<C-w><", { silent = true })
+vim.keymap.set({ "n", "x", "t" }, "<C-S-.>", "<C-w>>", { silent = true })
+vim.keymap.set({ "n", "x", "t" }, "<C-Up>", "<C-w>+", { silent = true })
+vim.keymap.set({ "n", "x", "t" }, "<C-Down>", "<C-w>-", { silent = true })
 
 vim.keymap.set("n", "<Esc>", "<cmd>noh<cr>", { silent = true, desc = "Clear search highlight" })
 
