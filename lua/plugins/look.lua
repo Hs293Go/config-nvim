@@ -257,6 +257,20 @@ return {
 			icons_enabled = true,
 			component_separators = { left = "", right = "" },
 			section_separators = { left = "", right = "" },
+			-- Set only lualine_x. Lualine replaces a named section fully, and
+			-- the other sections keep their default components.
+			sections = {
+				lualine_x = {
+					-- This component shows one spinner for each server that does
+					-- work. It replaces the noice progress messages, which are off
+					-- (see the noice spec below). An empty "done" symbol shows only
+					-- the name of a server that is idle.
+					{ "lsp_status", symbols = { done = "" } },
+					"encoding",
+					"fileformat",
+					"filetype",
+				},
+			},
 			tabline = {
 				lualine_a = {
 					{
@@ -277,6 +291,11 @@ return {
 		},
 		opts = {
 			lsp = {
+				-- Do not show the LSP progress messages ($/progress). A server can
+				-- divide one request into many work-done tokens. Noice shows one row
+				-- for each token, and the rows are almost the same. The lualine
+				-- lsp_status component shows the same data in one place.
+				progress = { enabled = false },
 				override = {
 					["vim.lsp.util.convert_input_to_markdown_lines"] = true,
 					["vim.lsp.util.stylize_markdown"] = true,

@@ -95,16 +95,20 @@ return {
 						client.handlers["textDocument/publishDiagnostics"] = function() end
 					end
 
-					-- Code lens: refresh on attach + on buffer activity.
-					-- rust-analyzer (Run | Debug above tests), ts_ls
-					-- (reference counts), gopls (test runners) all use it.
-					-- Skipped on Jetson — repeated codeLens queries on every
-					-- BufEnter / InsertLeave / BufWritePost are too costly.
+					-- Refresh the code lens at attach, at InsertLeave, and at
+					-- BufWritePost. rust-analyzer (Run and Debug above tests), ts_ls
+					-- (reference counts) and gopls (test runners) use the code lens.
+					-- Jetson does not refresh the code lens. Repeated codeLens
+					-- queries at each InsertLeave and BufWritePost are too slow.
+					-- BufEnter is not a trigger, because each change of buffer
+					-- resolves all the lenses again. A server that answers a lens
+					-- with a reference count (lua_ls) does a new workspace scan for
+					-- each lens.
 					-- <leader>cl still runs the lens on demand.
 					if not is_jetson and client:supports_method("textDocument/codeLens") then
 						vim.lsp.codelens.refresh({ bufnr = bufnr })
 						local g = vim.api.nvim_create_augroup("user_codelens_" .. bufnr, { clear = true })
-						vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave", "BufWritePost" }, {
+						vim.api.nvim_create_autocmd({ "InsertLeave", "BufWritePost" }, {
 							group = g,
 							buffer = bufnr,
 							callback = function()
@@ -157,7 +161,18 @@ return {
 			-- Lua / TS / CMake
 			local lua_ls_config = {
 				capabilities = capabilities,
-				settings = { Lua = { diagnostics = { globals = { "vim" } }, telemetry = { enable = false } } },
+				settings = {
+					Lua = {
+						diagnostics = { globals = { "vim" } },
+						telemetry = { enable = false },
+						-- nvim-lspconfig enables the code lens by default. Each lua_ls
+						-- lens resolves to a reference count, and each count starts a
+						-- new workspace scan ("Searching in files ..."). The scans are
+						-- slow, and `glr` or the fzf-lua references picker gives the
+						-- same data.
+						codeLens = { enable = false },
+					},
+				},
 			}
 			local lua_ls_bin = tools.bin("lua_ls")
 			if lua_ls_bin then
