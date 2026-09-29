@@ -191,6 +191,7 @@ Git integration: the signcolumn shows two-char index/worktree status (`M`/`A`/`D
 | `<leader>as` | | Add file (in tree-style buffers) |
 | `<leader>aa` | | Accept diff |
 | `<leader>ad` | | Deny diff |
+| `<C-q>` | t | Exit to normal mode (Claude Code terminal buffer only) |
 
 ### Copilot inline suggestions (insert mode)
 
@@ -228,6 +229,7 @@ Each toggle notifies on/off state via the snacks notifier.
 | `<leader>uh` | Inlay hints |
 | `<leader>uT` | Treesitter highlight |
 | `<leader>ub` | Background light/dark |
+| `<leader>um` | Render Markdown (in-buffer rendering; off by default) |
 
 ### Sessions (persistence.nvim)
 
@@ -268,6 +270,12 @@ Each toggle notifies on/off state via the snacks notifier.
 | `<leader>Twc` | Count words |
 | `<leader>Ti` | Vimtex info |
 | `<leader>Te` | Vimtex errors |
+
+### Markdown (`markdown` filetype)
+
+| Key | Action |
+|---|---|
+| `<leader>cp` | Toggle live browser preview with KaTeX math (markdown-preview.nvim) |
 
 ### Terminal
 

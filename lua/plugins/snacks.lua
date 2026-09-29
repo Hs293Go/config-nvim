@@ -28,6 +28,14 @@ return {
 			-- Highlight other occurrences of the symbol under cursor via LSP
 			-- document highlight (VSCode default behavior).
 			words = { enabled = true },
+			-- Math popups: with the cursor on a `$...$` / `$$...$$` span (markdown,
+			-- LaTeX), render it via pdflatex + ImageMagick and show it in a float
+			-- over the raw source. Needs a kitty-graphics terminal (kitty, ghostty,
+			-- wezterm). inline = false keeps the buffer text untouched.
+			image = {
+				enabled = true,
+				doc = { inline = false, float = true },
+			},
 			dashboard = {
 				preset = {
 					header = [[

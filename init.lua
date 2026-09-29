@@ -215,7 +215,8 @@ vim.api.nvim_create_autocmd("FileType", {
 	callback = set_tab_width(4),
 })
 
--- markdown: turn off conceal so raw syntax stays visible while editing
+-- markdown: conceal off by default; render-markdown.nvim raises it while
+-- rendering and drops back to this when toggled off (<leader>um)
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "markdown",
 	callback = function()
