@@ -9,8 +9,9 @@ in this config. It is maintained by hand — there is no generator script.
 change.** This includes:
 
 - `vim.keymap.set(...)` calls anywhere under `init.lua` or `lua/**/*.lua`
-- `keys = { ... }` tables inside lazy.nvim plugin specs (under `lua/plugins/`)
-- Plugin-internal keymaps you configure via `opts` (e.g. `blink.cmp`'s `keymap`
+- `pack.map({ ... })` key tables in `lua/plugins/*.lua` (see
+  `lua/config/pack.lua` for the entry format)
+- Plugin-internal keymaps you configure via `setup()` tables (e.g. `blink.cmp`'s `keymap`
   table, `nvim-treesitter`'s `keymaps` blocks, `oil.nvim`'s `keymaps` table,
   `copilot.lua`'s `suggestion.keymap`)
 - Buffer-local keymaps installed by autocmds (e.g. the lazygit `<C-hjkl>`

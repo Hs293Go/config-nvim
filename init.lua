@@ -1,3 +1,13 @@
+-- Cache compiled Lua modules. lazy.nvim enabled this cache before the change
+-- to vim.pack.
+vim.loader.enable()
+
+-- Do not send progress bars to the terminal. Neovim 0.12 sends OSC 9;4 for
+-- each progress message (for example, on :write). kitty before 0.40 shows
+-- OSC 9 as a desktop notification ("4;0;0"). Remove this line after you
+-- upgrade kitty.
+pcall(vim.api.nvim_del_augroup_by_name, "nvim.progress")
+
 -- LEADERS
 -- =======
 -- Must be set before any `<leader>` mapping is defined; otherwise `<leader>`
@@ -360,8 +370,39 @@ vim.api.nvim_create_autocmd("FileType", {
 -- Mini-mason: registers :ToolInstall / :ToolList user commands and prepends
 -- .tools/npm/node_modules/.bin to PATH so conform / nvim-lint find locally-
 -- installed CLI tools (markdownlint, taplo, prettier) by name. Required
--- before lazy bootstrap so the PATH side effect is in place when plugins
--- with eager events (BufReadPost / BufWritePre) start resolving binaries.
+-- before the plugins so the PATH side effect is in place when conform /
+-- nvim-lint start resolving binaries.
 require("config.tools")
 
-require("config.lazy")
+-- PLUGINS
+-- =======
+-- `vim.pack` manages the plugins (see lua/config/pack.lua).
+-- nvim-pack-lock.json records the plugin versions. All plugins load at startup.
+-- A module that needs another module to load first requires that module.
+-- Load "look" first. It sets the colorscheme that the other plugins use.
+-- Load "snacks" second. The other modules use the `Snacks` global.
+require("config.pack")
+for _, name in ipairs({
+	"look",
+	"snacks",
+	"ts",
+	"cmp",
+	"lsp",
+	"fmt",
+	"diag",
+	"git",
+	"edit",
+	"nav",
+	"tasks",
+	"neotest",
+	"markdown",
+	"vimtex",
+	"session",
+	"ai",
+}) do
+	-- If one module fails, show the error and load the other modules.
+	local ok, err = xpcall(require, debug.traceback, "plugins." .. name)
+	if not ok then
+		vim.notify(("plugins.%s: %s"):format(name, err), vim.log.levels.ERROR)
+	end
+end
