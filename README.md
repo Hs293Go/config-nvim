@@ -293,6 +293,19 @@ Each toggle notifies on/off state via the snacks notifier.
 | `<leader>Ti`  | Vimtex info   |
 | `<leader>Te`  | Vimtex errors |
 
+### Typst (tinymist, `typst` filetype)
+
+Same keys as LaTeX, buffer-local to typst buffers.
+
+| Key           | Action                                                                    |
+| ------------- | ------------------------------------------------------------------------- |
+| `<leader>Tcc` | Toggle continuous compile (export now, then on each `:w`; okular reloads) |
+| `<leader>Tcl` | Clear tinymist cache (typst has no aux files)                             |
+| `<leader>Tcv` | Compile, then open the PDF in okular                                      |
+| `<leader>Twc` | Count words (and chars, pages)                                            |
+| `<leader>Ti`  | tinymist info (root, inputs, font paths)                                  |
+| `<leader>Te`  | Errors of this buffer (location list)                                     |
+
 ### Markdown (`markdown` filetype)
 
 | Key          | Action                                                              |

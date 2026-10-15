@@ -397,6 +397,7 @@ for _, name in ipairs({
 	"neotest",
 	"markdown",
 	"vimtex",
+	"typst",
 	"session",
 	"ai",
 }) do
