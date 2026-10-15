@@ -30,6 +30,7 @@ require("conform").setup({
 		typescriptreact = { "prettierd", "prettier", stop_after_first = true },
 		html = { "prettierd", "prettier", stop_after_first = true },
 		sql = { "pg_format" },
+		typst = { "typstyle" },
 		["_"] = { "trim_whitespace" },
 	},
 	format_on_save = function(bufnr)

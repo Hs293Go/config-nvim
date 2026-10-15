@@ -150,6 +150,9 @@ do
 	vim.lsp.config("texlab", { capabilities = capabilities })
 	vim.lsp.enable("texlab")
 
+	vim.lsp.config("tinymist", { capabilities = capabilities })
+	vim.lsp.enable("tinymist")
+
 	-- Lua / TS / CMake
 	local lua_ls_config = {
 		capabilities = capabilities,
