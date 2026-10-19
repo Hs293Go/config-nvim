@@ -169,6 +169,35 @@ tracked file in the buffer uses `git mv` (history follows); deleting one uses
 | `<leader>ghD` |      | Diff this (against HEAD~)    |
 | `ih`          | o, x | Text object: gitsigns hunk   |
 
+#### Diffview (diffview.nvim)
+
+| Key           | Mode | Action                                                    |
+| ------------- | ---- | --------------------------------------------------------- |
+| `<leader>gdd` |      | Diff uncommitted changes (staged + unstaged) vs HEAD      |
+| `<leader>gdm` |      | Diff branch against `origin/HEAD` (merge-base, like PR)   |
+| `<leader>gdh` |      | File history (current file)                               |
+| `<leader>gdh` | x    | History of the selected line range                        |
+| `<leader>gdH` |      | Repo history                                              |
+| `<leader>gdq` |      | Close Diffview                                            |
+| `q`           |      | (Inside Diffview view / file panel / history panel) close |
+
+#### GitHub PRs and issues (octo.nvim)
+
+Needs the `gh` CLI, authenticated with `gh auth login`.
+
+| Key           | Action                |
+| ------------- | --------------------- |
+| `<leader>gpl` | List PRs (fzf)        |
+| `<leader>gps` | Search PRs            |
+| `<leader>gpc` | Create PR             |
+| `<leader>gpr` | Start / resume review |
+| `<leader>gpS` | Submit review         |
+| `<leader>gpi` | List issues (fzf)     |
+
+Octo buffers and review diffs keep octo's default buffer-local maps (mostly
+under `<localleader>`, e.g. `<localleader>ca` add comment, `]q`/`[q` next/prev
+file).
+
 ### Tasks (overseer + bespoke wrappers)
 
 | Key                          | Action                           |
