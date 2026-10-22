@@ -35,10 +35,11 @@ do
 	-- silently drop back to bare protocol defaults.
 	local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-	-- Mini-mason: source for repo-local tool binaries. Already required
-	-- in init.lua (which prepends PATH and registers :ToolInstall /
-	-- :ToolList); the require here just grabs the cached module so
-	-- per-server cmd overrides can use tools.bin(name).
+	-- Mini-mason: resolves tool binaries, PATH first and repo-local
+	-- installs as the fallback. Already required in init.lua (which
+	-- appends to PATH and registers :ToolInstall / :ToolList); the
+	-- require here just grabs the cached module so per-server cmd
+	-- overrides can use tools.bin(name).
 	local tools = require("config.tools")
 	-- Platform gate: Jetson devices skip heavy LSP behaviors that
 	-- otherwise pin one CPU core or stream redundant traffic on every
@@ -181,9 +182,9 @@ do
 	vim.lsp.enable("cmake")
 
 	-- Schema-aware servers via the mini-mason in config.tools.
-	-- Servers are only enabled when their binary is resolvable
-	-- (locally installed under .tools/npm/ or available on PATH).
-	-- Run :ToolInstall to bootstrap on a fresh checkout.
+	-- Servers are only enabled when their binary is resolvable (on PATH,
+	-- or else locally installed under .tools/npm/). On a host without a
+	-- system package manager, run :ToolInstall to bootstrap.
 	local jsonls_bin = tools.bin("jsonls")
 	if jsonls_bin then
 		vim.lsp.config("jsonls", {

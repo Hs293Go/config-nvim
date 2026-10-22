@@ -367,11 +367,11 @@ vim.api.nvim_create_autocmd("FileType", {
 -- FRAMEWORKS
 -- ==========
 
--- Mini-mason: registers :ToolInstall / :ToolList user commands and prepends
--- .tools/npm/node_modules/.bin to PATH so conform / nvim-lint find locally-
--- installed CLI tools (markdownlint, taplo, prettier) by name. Required
--- before the plugins so the PATH side effect is in place when conform /
--- nvim-lint start resolving binaries.
+-- Mini-mason: registers :ToolInstall / :ToolList user commands and appends
+-- .tools/npm/node_modules/.bin to PATH so conform / nvim-lint fall back to
+-- locally-installed CLI tools (markdownlint, taplo, prettier) when the system
+-- has none. Required before the plugins so the PATH side effect is in place
+-- when conform / nvim-lint start resolving binaries.
 require("config.tools")
 
 -- PLUGINS

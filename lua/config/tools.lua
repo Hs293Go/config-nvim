@@ -10,15 +10,19 @@
 --
 -- User commands (registered on require):
 --   :ToolInstall [name]   -- install one tool, or all missing if no arg
---   :ToolList             -- show install status (local / PATH / MISSING)
+--   :ToolList             -- show install status (PATH / local / MISSING)
 --
 -- From Lua: require("config.tools").bin("jsonls")
---   -> absolute path to local install if present, else PATH binary, else nil.
+--   -> PATH binary if present, else absolute path to local install, else nil.
 --   -> callers should skip vim.lsp.enable / set their formatter command when nil.
 --
--- Side effect on require: prepends .tools/npm/node_modules/.bin to vim.env.PATH
+-- PATH wins so a system package manager (home-manager on the desktops) owns
+-- the tools wherever it is set up. The local installs are the fallback for
+-- hosts without one (Jetson, Termux).
+--
+-- Side effect on require: appends .tools/npm/node_modules/.bin to vim.env.PATH
 -- so conform / nvim-lint resolve locally-installed CLI tools (markdownlint,
--- taplo, prettier, ...) by name without per-tool command overrides. The
+-- taplo, prettier, ...) by name when the system has no copy. The
 -- github-provider binaries are not on PATH; their callers use absolute paths
 -- via tools.bin().
 
@@ -28,14 +32,16 @@ local config_dir = vim.fn.stdpath("config")
 local install_root = vim.fs.joinpath(config_dir, ".tools/npm")
 local local_bin_dir = vim.fs.joinpath(install_root, "node_modules", ".bin")
 
--- Prepend local_bin_dir to PATH if not already present. Idempotent across
--- reloads so :Lazy reload won't keep pushing duplicate entries.
+-- Move local_bin_dir to the end of PATH. Dropping existing entries first keeps
+-- this idempotent across reloads, and also demotes a copy inherited at the
+-- front of PATH from a parent nvim (e.g. a shell opened in :terminal).
 do
 	local sep = vim.fn.has("win32") == 1 and ";" or ":"
-	local current = vim.env.PATH or ""
-	if not (sep .. current .. sep):find(sep .. local_bin_dir .. sep, 1, true) then
-		vim.env.PATH = local_bin_dir .. sep .. current
-	end
+	local entries = vim.tbl_filter(function(dir)
+		return dir ~= "" and dir ~= local_bin_dir
+	end, vim.split(vim.env.PATH or "", sep, { plain = true }))
+	table.insert(entries, local_bin_dir)
+	vim.env.PATH = table.concat(entries, sep)
 end
 
 M.registry = {
@@ -114,17 +120,24 @@ local function local_bin(entry)
 	return entry.bin_path or vim.fs.joinpath(local_bin_dir, entry.bin)
 end
 
+-- True when entry.bin resolves on PATH to something other than our own npm
+-- install, whose bin dir sits at the end of PATH.
+local function on_system_path(entry)
+	local resolved = vim.fn.exepath(entry.bin)
+	return resolved ~= "" and vim.fs.dirname(resolved) ~= local_bin_dir
+end
+
 function M.bin(name)
 	local entry = M.registry[name]
 	if not entry then
 		return nil
 	end
+	if on_system_path(entry) then
+		return entry.bin
+	end
 	local lb = local_bin(entry)
 	if vim.fn.executable(lb) == 1 then
 		return lb
-	end
-	if vim.fn.executable(entry.bin) == 1 then
-		return entry.bin
 	end
 	return nil
 end
@@ -336,10 +349,10 @@ vim.api.nvim_create_user_command("ToolList", function()
 	local lines = {}
 	for name, entry in pairs(M.registry) do
 		local status
-		if M.installed_locally(name) then
-			status = "local"
-		elseif vim.fn.executable(entry.bin) == 1 then
+		if on_system_path(entry) then
 			status = "PATH"
+		elseif M.installed_locally(name) then
+			status = "local"
 		else
 			status = "MISSING"
 		end
