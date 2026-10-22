@@ -364,16 +364,6 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
--- FRAMEWORKS
--- ==========
-
--- Mini-mason: registers :ToolInstall / :ToolList user commands and appends
--- .tools/npm/node_modules/.bin to PATH so conform / nvim-lint fall back to
--- locally-installed CLI tools (markdownlint, taplo, prettier) when the system
--- has none. Required before the plugins so the PATH side effect is in place
--- when conform / nvim-lint start resolving binaries.
-require("config.tools")
-
 -- PLUGINS
 -- =======
 -- `vim.pack` manages the plugins (see lua/config/pack.lua).

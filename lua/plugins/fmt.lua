@@ -2,8 +2,6 @@ local pack = require("config.pack")
 
 pack.add({ pack.gh("stevearc/conform.nvim") })
 
-local stylua_bin = require("config.tools").bin("stylua")
-
 require("conform").setup({
 	notify_on_error = false,
 	default_format_opts = { lsp_format = "fallback" },
@@ -41,7 +39,6 @@ require("conform").setup({
 	end,
 	formatters = {
 		latexindent = { append_args = { "--logfile=/dev/null", "--yaml", 'defaultIndent: "    "' } },
-		stylua = stylua_bin and { command = stylua_bin } or nil,
 	},
 })
 

@@ -35,12 +35,6 @@ do
 	-- silently drop back to bare protocol defaults.
 	local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-	-- Mini-mason: resolves tool binaries, PATH first and repo-local
-	-- installs as the fallback. Already required in init.lua (which
-	-- appends to PATH and registers :ToolInstall / :ToolList); the
-	-- require here just grabs the cached module so per-server cmd
-	-- overrides can use tools.bin(name).
-	local tools = require("config.tools")
 	-- Platform gate: Jetson devices skip heavy LSP behaviors that
 	-- otherwise pin one CPU core or stream redundant traffic on every
 	-- buffer event. See lua/config/platform.lua for detection details.
@@ -170,10 +164,6 @@ do
 			},
 		},
 	}
-	local lua_ls_bin = tools.bin("lua_ls")
-	if lua_ls_bin then
-		lua_ls_config.cmd = { lua_ls_bin }
-	end
 	vim.lsp.config("lua_ls", lua_ls_config)
 	vim.lsp.enable("lua_ls")
 	vim.lsp.config("ts_ls", { capabilities = capabilities })
@@ -181,55 +171,42 @@ do
 	vim.lsp.config("cmake", { capabilities = capabilities })
 	vim.lsp.enable("cmake")
 
-	-- Schema-aware servers via the mini-mason in config.tools.
-	-- Servers are only enabled when their binary is resolvable (on PATH,
-	-- or else locally installed under .tools/npm/). On a host without a
-	-- system package manager, run :ToolInstall to bootstrap.
-	local jsonls_bin = tools.bin("jsonls")
-	if jsonls_bin then
-		vim.lsp.config("jsonls", {
-			cmd = { jsonls_bin, "--stdio" },
-			capabilities = capabilities,
-			settings = {
-				json = {
-					schemas = require("schemastore").json.schemas(),
-					validate = { enable = true },
-				},
+	-- Schema-aware servers. The config installs no servers: each comes
+	-- from PATH, and Neovim skips a server whose `cmd` table names a
+	-- missing executable. jsonls and yamlls get explicit `cmd` tables for
+	-- that reason; nvim-lspconfig's defaults are functions, which Neovim
+	-- cannot check, so a missing binary would raise a spawn error.
+	vim.lsp.config("jsonls", {
+		cmd = { "vscode-json-language-server", "--stdio" },
+		capabilities = capabilities,
+		settings = {
+			json = {
+				schemas = require("schemastore").json.schemas(),
+				validate = { enable = true },
 			},
-		})
-		vim.lsp.enable("jsonls")
-	end
+		},
+	})
+	vim.lsp.enable("jsonls")
 
-	local yamlls_bin = tools.bin("yamlls")
-	if yamlls_bin then
-		vim.lsp.config("yamlls", {
-			cmd = { yamlls_bin, "--stdio" },
-			capabilities = capabilities,
-			settings = {
-				yaml = {
-					-- Defer schema list to SchemaStore.nvim so the bundled
-					-- yamlls schemaStore (slow, partial) stays disabled.
-					schemaStore = { enable = false, url = "" },
-					schemas = require("schemastore").yaml.schemas(),
-				},
+	vim.lsp.config("yamlls", {
+		cmd = { "yaml-language-server", "--stdio" },
+		capabilities = capabilities,
+		settings = {
+			yaml = {
+				-- Defer schema list to SchemaStore.nvim so the bundled
+				-- yamlls schemaStore (slow, partial) stays disabled.
+				schemaStore = { enable = false, url = "" },
+				schemas = require("schemastore").yaml.schemas(),
 			},
-		})
-		vim.lsp.enable("yamlls")
-	end
+		},
+	})
+	vim.lsp.enable("yamlls")
 
 	-- bashls supplements shellcheck (already running via nvim-lint).
 	-- bashls adds hover, jump-to-definition for variables/functions,
 	-- and completion that shellcheck-as-a-linter can't provide.
-	local bashls_bin = tools.bin("bashls")
-	if bashls_bin then
-		vim.lsp.config("bashls", {
-			cmd = { bashls_bin, "start" },
-			capabilities = capabilities,
-		})
-		vim.lsp.enable("bashls")
-	end
-
-	tools.notify_missing_once()
+	vim.lsp.config("bashls", { capabilities = capabilities })
+	vim.lsp.enable("bashls")
 
 	-- Diagnostics UI
 	vim.diagnostic.config({

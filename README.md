@@ -22,6 +22,23 @@ its keymaps. A module that needs another module requires that module.
 - `:PackClean` — delete installed plugins that the config does not add.
 - `:checkhealth vim.pack` — show the plugin state.
 
+## Language servers, formatters and linters
+
+The config installs none of them. It expects each on `PATH` and skips the ones
+that are missing. `:checkhealth vim.lsp` and `:ConformInfo` show what is
+missing.
+
+- Desktops and WSL: home-manager provides them.
+- Termux:
+
+  ```sh
+  pkg install lua-language-server stylua taplo nodejs
+  npm install -g vscode-langservers-extracted yaml-language-server \
+    bash-language-server prettier markdownlint-cli
+  ```
+
+- Jetson: optional. The Jetson lite profile works without them.
+
 ## Hotkeys
 
 `<leader>` is `<Space>`. `<localleader>` is `\`. Mode column omitted for normal
