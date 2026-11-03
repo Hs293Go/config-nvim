@@ -65,8 +65,11 @@ require("gitsigns").setup({
 	end,
 })
 
+-- octo.setup() requires its picker provider at once, and the fzf-lua provider
+-- requires fzf-lua at module load. plugins.nav adds fzf-lua (and plenary).
+require("plugins.nav")
+
 pack.add({
-	pack.gh("nvim-lua/plenary.nvim"), -- octo dependency
 	pack.gh("sindrets/diffview.nvim"),
 	pack.gh("pwntester/octo.nvim"),
 })
