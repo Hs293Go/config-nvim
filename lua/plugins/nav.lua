@@ -481,11 +481,25 @@ pack.map({
 		desc = "Open Oil (floating window)",
 	},
 	{
+		"<leader>oc",
+		function()
+			require("oil").open_float(vim.fn.getcwd())
+		end,
+		desc = "Open Oil (Current working dir; floating window)",
+	},
+	{
 		"<leader>oO",
 		function()
 			require("oil").open()
 		end,
 		desc = "Open Oil (full window)",
+	},
+	{
+		"<leader>oC",
+		function()
+			require("oil").open(vim.fn.getcwd())
+		end,
+		desc = "Open Oil (Current working dir; full window)",
 	},
 	{
 		"<leader>ov",
