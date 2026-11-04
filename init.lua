@@ -77,6 +77,7 @@ vim.opt.breakindent = true
 vim.opt.linebreak = true
 vim.opt.pumheight = 10
 vim.opt.pumblend = 10
+vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
 
 -- KEYMAPS
 -- =======
