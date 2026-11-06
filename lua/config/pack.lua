@@ -8,9 +8,21 @@ function M.gh(repo)
 	return "https://github.com/" .. repo
 end
 
+--- True if home-manager provides this plugin (`vim.g.nix_plugins`, see home.nix).
+---@param name string
+---@return boolean
+function M.from_nix(name)
+	return vim.list_contains(vim.g.nix_plugins or {}, name)
+end
+
 --- Add plugins. Do not ask for confirmation before the first install.
+--- Plugins provided by nix are already on the packpath and are skipped.
 ---@param specs (string|vim.pack.Spec)[]
 function M.add(specs)
+	specs = vim.tbl_filter(function(spec)
+		local src = type(spec) == "table" and (spec.name or spec.src) or spec
+		return not M.from_nix((src:match("[^/]+$"):gsub("%.git$", "")))
+	end, specs)
 	vim.pack.add(specs, { confirm = false })
 end
 

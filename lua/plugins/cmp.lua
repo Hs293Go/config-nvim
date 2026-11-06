@@ -7,7 +7,7 @@ pack.add({
 	{ src = gh("saghen/blink.compat"), version = vim.version.range("*") },
 	gh("micangl/cmp-vimtex"), -- Source for vimtex completions
 	gh("onsails/lspkind.nvim"), -- Icons for completions
-	{ src = gh("L3MON4D3/LuaSnip"), version = "v2.4.0" }, -- Snippet engine
+	{ src = gh("L3MON4D3/LuaSnip"), version = "v2.5.0" }, -- Snippet engine
 	gh("rafamadriz/friendly-snippets"), -- Snippet collection
 	gh("honza/vim-snippets"), -- Snippet collection
 	gh("abecodes/tabout.nvim"),

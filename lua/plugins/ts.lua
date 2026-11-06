@@ -59,11 +59,14 @@ local ensure_installed = {
 	"query",
 	"regex",
 }
-local missing = vim.tbl_filter(function(lang)
-	return not vim.list_contains(ts.get_installed(), lang)
-end, ensure_installed)
-if #missing > 0 then
-	ts.install(missing)
+-- Under nix the parsers are precompiled (home.nix) and invisible to get_installed().
+if not pack.from_nix("nvim-treesitter") then
+	local missing = vim.tbl_filter(function(lang)
+		return not vim.list_contains(ts.get_installed(), lang)
+	end, ensure_installed)
+	if #missing > 0 then
+		ts.install(missing)
+	end
 end
 
 -- NVIM-TREESITTER-TEXTOBJECTS

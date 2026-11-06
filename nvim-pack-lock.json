@@ -1,23 +1,8 @@
 {
   "plugins": {
-    "LuaSnip": {
-      "rev": "458560534a73f7f8d7a11a146c801db00b081df0",
-      "src": "https://github.com/L3MON4D3/LuaSnip",
-      "version": "'v2.4.0'"
-    },
     "SchemaStore.nvim": {
       "rev": "72d144a9e014646963b8a5c67a4fde19b9772528",
       "src": "https://github.com/b0o/SchemaStore.nvim"
-    },
-    "blink.cmp": {
-      "rev": "78336bc89ee5365633bcf754d93df01678b5c08f",
-      "src": "https://github.com/saghen/blink.cmp",
-      "version": "1.0.0 - 2.0.0"
-    },
-    "blink.compat": {
-      "rev": "2ed6d9a28b07fa6f3bface818470605f8896408c",
-      "src": "https://github.com/saghen/blink.compat",
-      "version": ">=0.0.0"
     },
     "catppuccin": {
       "rev": "edefef779ab08ce1a4a404713e3012b0d202bd35",
@@ -79,10 +64,6 @@
       "rev": "221ce6b2d999187044529f49da6554a92f740a96",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
-    "markdown-preview.nvim": {
-      "rev": "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee",
-      "src": "https://github.com/iamcco/markdown-preview.nvim"
-    },
     "neotest": {
       "rev": "27bf921498043f7ecd821d6db68d05de244bbd02",
       "src": "https://github.com/nvim-neotest/neotest"
@@ -119,20 +100,6 @@
       "rev": "2e93e154de9ff326def6480a4358bfc149d5da2c",
       "src": "https://github.com/kylechui/nvim-surround",
       "version": ">=0.0.0"
-    },
-    "nvim-treesitter": {
-      "rev": "1a4f47b03dfe92d28de7d5654c67327ef008c9e6",
-      "src": "https://github.com/nvim-treesitter/nvim-treesitter",
-      "version": "'main'"
-    },
-    "nvim-treesitter-context": {
-      "rev": "f3061339b8eaf9fda873600bc425b8d2d8502533",
-      "src": "https://github.com/nvim-treesitter/nvim-treesitter-context"
-    },
-    "nvim-treesitter-textobjects": {
-      "rev": "5c7b0263797dfd1bd6202f2b219f3b53a80b2187",
-      "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
-      "version": "'main'"
     },
     "nvim-web-devicons": {
       "rev": "5f032a85be210cd1c6ac98861eb3b187ff3bd5eb",
