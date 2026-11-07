@@ -22,6 +22,14 @@ its keymaps. A module that needs another module requires that module.
 - `:PackClean` — delete installed plugins that the config does not add.
 - `:checkhealth vim.pack` — show the plugin state.
 
+## External tools
+
+This config does not install LSP servers, formatters or linters. Install them
+with home-manager (`home.nix`) or by hand. A missing binary disables that one
+feature: `vim.lsp.enable()` skips a server whose command is not executable,
+conform skips an unavailable formatter, and `lua/plugins/diag.lua` only runs
+the linters found on `PATH`.
+
 ## Hotkeys
 
 `<leader>` is `<Space>`. `<localleader>` is `\`. Mode column omitted for normal

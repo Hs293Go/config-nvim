@@ -64,8 +64,22 @@ lint.linters_by_ft = {
 vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
 	group = vim.api.nvim_create_augroup("user_nvim_lint", { clear = true }),
 	callback = function()
-		-- try_lint silently no-ops for filetypes without a configured linter
-		-- and for linters whose binary isn't installed (logged to :messages).
-		lint.try_lint()
+		-- Linters are not installed by this config. nvim-lint spawns the
+		-- binary blindly and raises an error notification on every trigger
+		-- when it is missing, so only run the linters that are on PATH.
+		local names = vim.tbl_filter(function(name)
+			local linter = lint.linters[name]
+			if type(linter) == "function" then
+				linter = linter()
+			end
+			local cmd = linter and linter.cmd
+			if type(cmd) == "function" then
+				cmd = cmd()
+			end
+			return type(cmd) == "string" and vim.fn.executable(cmd) == 1
+		end, lint.linters_by_ft[vim.bo.filetype] or {})
+		if #names > 0 then
+			lint.try_lint(names)
+		end
 	end,
 })
