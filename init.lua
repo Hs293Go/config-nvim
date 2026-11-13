@@ -33,6 +33,21 @@ vim.opt.relativenumber = false
 vim.opt.number = true
 vim.opt.mouse = "a"
 vim.opt.clipboard = "unnamedplus"
+-- Over ssh there is no X display for xclip, and Nvim only falls back to OSC 52
+-- on its own when 'clipboard' is empty. Copy through OSC 52 so yanks reach the
+-- local clipboard. Paste from Nvim's own register: reading the clipboard over
+-- OSC 52 makes kitty ask for permission on every put.
+if vim.env.SSH_TTY then
+	local osc52 = require("vim.ui.clipboard.osc52")
+	local function paste()
+		return { vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") }
+	end
+	vim.g.clipboard = {
+		name = "OSC 52 copy, local paste",
+		copy = { ["+"] = osc52.copy("+"), ["*"] = osc52.copy("*") },
+		paste = { ["+"] = paste, ["*"] = paste },
+	}
+end
 vim.opt.cursorline = true
 vim.opt.swapfile = false
 vim.opt.foldenable = true
