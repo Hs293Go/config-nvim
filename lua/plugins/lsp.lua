@@ -162,8 +162,22 @@ do
 	end
 	vim.lsp.config("lua_ls", lua_ls_config)
 	vim.lsp.enable("lua_ls")
-	vim.lsp.config("ts_ls", { capabilities = capabilities })
+	-- TypeScript and Vue. vue_ls serves the template and style blocks of a
+	-- .vue file and forwards the script block to ts_ls through the Vue
+	-- plugin. home.nix sets vim.g.vue_ts_plugin to the plugin's store path.
+	vim.lsp.config("ts_ls", {
+		capabilities = capabilities,
+		init_options = {
+			plugins = { { name = "@vue/typescript-plugin", location = vim.g.vue_ts_plugin, languages = { "vue" } } },
+		},
+		filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
+	})
 	vim.lsp.enable("ts_ls")
+	vim.lsp.config("vue_ls", { capabilities = capabilities })
+	vim.lsp.enable("vue_ls")
+	-- ESLint attaches only inside a project that has an ESLint config.
+	vim.lsp.config("eslint", { capabilities = capabilities })
+	vim.lsp.enable("eslint")
 	vim.lsp.config("cmake", { capabilities = capabilities })
 	vim.lsp.enable("cmake")
 

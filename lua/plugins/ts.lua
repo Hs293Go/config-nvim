@@ -45,6 +45,13 @@ local ensure_installed = {
 	"markdown",
 	"markdown_inline",
 
+	-- web languages (a .vue file embeds the other four)
+	"javascript",
+	"typescript",
+	"vue",
+	"css",
+	"html",
+
 	-- config languages
 	"toml",
 	"xml",
