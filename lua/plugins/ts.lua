@@ -119,11 +119,6 @@ end
 -- ATTACH
 -- ======
 
--- Parser compilation needs a working C toolchain. Stock L4T images ship
--- without one, so auto-install only produces errors on Jetson. There, install
--- parsers manually with `:TSInstall <lang>` after you set up a compiler.
-local auto_install = not require("config.platform").is_jetson()
-
 -- Start treesitter highlighting in a buffer. If the language has the queries,
 -- also set the nvim-treesitter indentexpr and the textobject keys.
 local function attach(buf, lang)
@@ -148,7 +143,7 @@ vim.api.nvim_create_autocmd("FileType", {
 		end
 		-- No parser is installed for this language. Install it if
 		-- nvim-treesitter has it, then attach.
-		if auto_install and vim.list_contains(ts.get_available(), lang) then
+		if vim.list_contains(ts.get_available(), lang) then
 			ts.install(lang):await(vim.schedule_wrap(function()
 				attach(ev.buf, lang)
 			end))

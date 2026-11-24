@@ -7,8 +7,8 @@ reference.
 
 - `lazy` heritage: This config is a handrolled port of parts of the LazyVim
   starter template.
-- Maximal compatibility: This config should work on both desktops, Nvidia Jetson
-  devices, WSL, and android (via Termux) with minimal changes.
+- Compatibility: This config should work on desktops and WSL with minimal
+  changes.
 
 ## Plugin management
 

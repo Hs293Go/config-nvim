@@ -189,23 +189,12 @@ vim.keymap.set("n", "<Esc>", "<cmd>noh<cr>", { silent = true, desc = "Clear sear
 vim.keymap.set("n", "<C-/>", "gcc", { remap = true, desc = "Toggle line comment" })
 vim.keymap.set("v", "<C-/>", "gc", { remap = true, desc = "Toggle comment selection" })
 
--- Open a directory in the OS file manager (xdg-open / open / explorer).
-local function open_directory(dir)
-	local cmd
-	if vim.fn.has("mac") == 1 then
-		cmd = { "open", dir }
-	elseif vim.fn.has("win32") == 1 then
-		cmd = { "explorer", dir }
-	else
-		cmd = { "xdg-open", dir }
-	end
-	vim.fn.jobstart(cmd, { detach = true })
-end
+-- Open a directory in the OS file manager.
 vim.keymap.set("n", "<leader>e", function()
-	open_directory(vim.fn.expand("%:p:h"))
+	vim.ui.open(vim.fn.expand("%:p:h"))
 end, { desc = "Open in explorer (file parent)" })
 vim.keymap.set("n", "<leader>E", function()
-	open_directory(vim.fn.getcwd())
+	vim.ui.open(vim.fn.getcwd())
 end, { desc = "Open in explorer (cwd)" })
 
 -- AUTOCMDS

@@ -3,31 +3,25 @@ local gh = pack.gh
 
 -- COPILOT
 -- =======
--- Skipped on Jetson — auto-triggered LSP-over-HTTPS round trips on
--- every keystroke make the editor feel sticky on weak CPUs, and the
--- panel server start-up itself adds startup time. ai/claudecode.nvim
--- (terminal-driven) remains available.
-if not require("config.platform").is_jetson() then
-	pack.add({ gh("zbirenbaum/copilot.lua") })
-	require("copilot").setup({
-		suggestion = {
-			enabled = true,
-			auto_trigger = true,
-			hide_during_completion = false,
-			keymap = {
-				accept = "<Right>",
-				accept_word = "<S-Right>",
-				accept_line = "<C-S-Right>",
-				next = "<C-Right>",
-				prev = "<C-Left>",
-			},
+pack.add({ gh("zbirenbaum/copilot.lua") })
+require("copilot").setup({
+	suggestion = {
+		enabled = true,
+		auto_trigger = true,
+		hide_during_completion = false,
+		keymap = {
+			accept = "<Right>",
+			accept_word = "<S-Right>",
+			accept_line = "<C-S-Right>",
+			next = "<C-Right>",
+			prev = "<C-Left>",
 		},
-		filetypes = {
-			tex = true,
-			markdown = true,
-		},
-	})
-end
+	},
+	filetypes = {
+		tex = true,
+		markdown = true,
+	},
+})
 
 -- CLAUDECODE
 -- ==========

@@ -48,9 +48,7 @@ require("blink.cmp").setup({
 	},
 	-- Show parameter hints while typing inside a function call.
 	-- VSCode-default behavior; closes the last big completion-UI gap.
-	-- Disabled on Jetson: an extra textDocument/signatureHelp request
-	-- per character is too much LSP traffic on the platform.
-	signature = { enabled = not require("config.platform").is_jetson() },
+	signature = { enabled = true },
 	snippets = { preset = "luasnip" },
 	sources = {
 		default = { "lsp", "path", "snippets" },

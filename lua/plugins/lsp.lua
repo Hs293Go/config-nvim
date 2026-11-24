@@ -40,10 +40,6 @@ do
 	-- :ToolList); the require here just grabs the cached module so
 	-- per-server cmd overrides can use tools.bin(name).
 	local tools = require("config.tools")
-	-- Platform gate: Jetson devices skip heavy LSP behaviors that
-	-- otherwise pin one CPU core or stream redundant traffic on every
-	-- buffer event. See lua/config/platform.lua for detection details.
-	local is_jetson = require("config.platform").is_jetson()
 
 	-- 2. Define our global LSP behavior (the new 'on_attach')
 	vim.api.nvim_create_autocmd("LspAttach", {
@@ -54,10 +50,7 @@ do
 			if not client then
 				return
 			end
-			-- LSP folding requests on every fold operation are too slow
-			-- on Jetson; stick with the global treesitter foldexpr
-			-- there.
-			if not is_jetson and client:supports_method("textDocument/foldingRange") then
+			if client:supports_method("textDocument/foldingRange") then
 				vim.wo.foldmethod = "expr"
 				vim.wo.foldexpr = "v:lua.vim.lsp.foldexpr()"
 			end
@@ -90,14 +83,12 @@ do
 			-- Refresh the code lens at attach, at InsertLeave, and at
 			-- BufWritePost. rust-analyzer (Run and Debug above tests), ts_ls
 			-- (reference counts) and gopls (test runners) use the code lens.
-			-- Jetson does not refresh the code lens. Repeated codeLens
-			-- queries at each InsertLeave and BufWritePost are too slow.
 			-- BufEnter is not a trigger, because each change of buffer
 			-- resolves all the lenses again. A server that answers a lens
 			-- with a reference count (lua_ls) does a new workspace scan for
 			-- each lens.
 			-- <leader>cl still runs the lens on demand.
-			if not is_jetson and client:supports_method("textDocument/codeLens") then
+			if client:supports_method("textDocument/codeLens") then
 				vim.lsp.codelens.refresh({ bufnr = bufnr })
 				local g = vim.api.nvim_create_augroup("user_codelens_" .. bufnr, { clear = true })
 				vim.api.nvim_create_autocmd({ "InsertLeave", "BufWritePost" }, {
@@ -119,18 +110,14 @@ do
 	-- 3. Configure Servers via vim.lsp.enable
 	-- This automatically starts the servers when a matching filetype is opened
 
-	-- Clangd. On Jetson, drop --background-index (full project index
-	-- pegs the CPU and bloats disk) and --clang-tidy (per-diagnostic
-	-- tidy checks compound the slowdown). The trade-off is no
-	-- cross-TU navigation cache and only compiler-level diagnostics;
-	-- acceptable on the platform where the user mostly reads code.
-	local clangd_cmd = { "clangd", "--header-insertion=never", "--fallback-style=google" }
-	if not is_jetson then
-		table.insert(clangd_cmd, 2, "--clang-tidy")
-		table.insert(clangd_cmd, 2, "--background-index")
-	end
 	vim.lsp.config("clangd", {
-		cmd = clangd_cmd,
+		cmd = {
+			"clangd",
+			"--background-index",
+			"--clang-tidy",
+			"--header-insertion=never",
+			"--fallback-style=google",
+		},
 		capabilities = capabilities,
 	})
 	vim.lsp.enable("clangd")
@@ -237,8 +224,8 @@ do
 		underline = true,
 		-- Errors paint over warnings on the same line; quieter signs.
 		severity_sort = true,
-		-- Don't churn diagnostics while typing — perf win on Jetson,
-		-- and matches VSCode's "save to validate" feel for most LSPs.
+		-- Don't churn diagnostics while typing — matches VSCode's "save
+		-- to validate" feel for most LSPs.
 		update_in_insert = false,
 		float = { border = "rounded", source = "if_many" },
 	})

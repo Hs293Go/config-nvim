@@ -16,10 +16,6 @@
       "rev": "c09ca05bfa0641754516f13294d73d3799a02fc8",
       "src": "https://github.com/micangl/cmp-vimtex"
     },
-    "codediff.nvim": {
-      "rev": "09d9ebef2cc5a5c04db7a349cd6c61bdf84ecc8e",
-      "src": "https://github.com/esmuellert/codediff.nvim"
-    },
     "codesettings.nvim": {
       "rev": "f1066a25b0c641832fa3bf9c317a24f8649ca6b9",
       "src": "https://github.com/mrjones2014/codesettings.nvim"

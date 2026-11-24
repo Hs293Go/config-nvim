@@ -28,13 +28,12 @@ local config_dir = vim.fn.stdpath("config")
 local install_root = vim.fs.joinpath(config_dir, ".tools/npm")
 local local_bin_dir = vim.fs.joinpath(install_root, "node_modules", ".bin")
 
--- Prepend local_bin_dir to PATH if not already present. Idempotent across
--- reloads so :Lazy reload won't keep pushing duplicate entries.
+-- Prepend local_bin_dir to PATH if not already present. Idempotent, so a
+-- second require does not push a duplicate entry.
 do
-	local sep = vim.fn.has("win32") == 1 and ";" or ":"
 	local current = vim.env.PATH or ""
-	if not (sep .. current .. sep):find(sep .. local_bin_dir .. sep, 1, true) then
-		vim.env.PATH = local_bin_dir .. sep .. current
+	if not (":" .. current .. ":"):find(":" .. local_bin_dir .. ":", 1, true) then
+		vim.env.PATH = local_bin_dir .. ":" .. current
 	end
 end
 
@@ -298,15 +297,8 @@ function M.install_missing()
 	end
 end
 
--- Notify-once on tools nowhere available (neither local nor PATH). Skipped on
--- Jetson — npm / GitHub release downloads aren't a practical install path on
--- stock L4T images (no node, slow network), and the warning fires every
--- startup with no remediation the user wants to take. :ToolList still reports
--- status on demand.
+-- Notify-once on tools nowhere available (neither local nor PATH).
 function M.notify_missing_once()
-	if require("config.platform").is_jetson() then
-		return
-	end
 	local missing = M.missing()
 	if #missing > 0 then
 		vim.schedule(function()
